@@ -59,6 +59,9 @@ export default function BusinessHomePage() {
           <Link href="/personel">
             <Button>Personel atama</Button>
           </Link>
+          <Link href="/iletisim">
+            <Button variant="secondary">Bildirim / Mesaj / Sorun</Button>
+          </Link>
           <Link href="/hesap">
             <Button variant="secondary">Hesap</Button>
           </Link>
