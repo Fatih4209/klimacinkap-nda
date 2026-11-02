@@ -54,6 +54,7 @@ Migrations:
 - `20260322000500_notifications_messaging_issues.sql` — bildirim, mesaj, sorun + push denemeleri
 - `20260322000600_business_subscriptions.sql` — abonelik planları, checkout, yetki, webhook olayları
 - `20260322000700_account_deletion_requests.sql` — hesap silme talebi (pending; sahte completed yok)
+- `20260322000800_accounts_bootstrap_applications.sql` — başvuru draft/submit, admin inceleme, bölge upsert, ilk admin bootstrap (service_role)
 - Edge stub: `supabase/functions/push-dispatch` (EXPO_ACCESS_TOKEN yoksa sent yazmaz)
 - Edge stub: `supabase/functions/payment-webhook` (imza/secret yoksa abonelik aktifleşmez)
 
@@ -66,6 +67,8 @@ Personel RPC özeti: `invite_staff_member`, `assign_staff_to_klima_appointment` 
 İletişim RPC özeti: `register_push_token`, in-app `notifications`, `send_thread_message`, `open_issue` / `update_issue_status`. Push denemeleri `skipped_no_provider` olabilir; `sent` yalnızca gerçek provider message id ile. Sipariş durumu push’tan değil sunucu tablolarından okunur.
 
 Abonelik RPC özeti: `start_subscription_checkout` (anahtar yoksa `blocked_no_provider`), `cancel_business_subscription`, `business_subscription_is_entitled` / `assert_business_subscription_entitled` (teklif/katalog/atama), `apply_subscription_provider_event` (yalnızca service_role + gerçek provider event id).
+
+Hesap / başvuru RPC özeti: `save_business_application_draft`, `submit_business_application`, `admin_review_business_application` (onay→işletme+kategori+business_owner; yetkili servis iddiası onay değildir), `admin_upsert_service_region`, `bootstrap_first_platform_admin` (yalnızca service_role; admin varsa reddeder). Admin UI: `/bootstrap` + `ADMIN_BOOTSTRAP_SECRET` — açık admin kaydı yok.
 
 - RLS açık; işletme `is_active` için onaylı kategori zorunlu
 - SMS Auth / proje bağlantısı dış bağımlılık — bağlanmadan “tamamlandı” sayılmaz

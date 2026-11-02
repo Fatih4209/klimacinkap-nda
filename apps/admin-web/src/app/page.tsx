@@ -46,11 +46,15 @@ export default function AdminHomePage() {
           <Link href="/hesap-silme" style={{ textDecoration: "none" }}>
             <span className="kk-btn kk-btn-secondary">Hesap silme kuyruğu</span>
           </Link>
+          <Link href="/bootstrap" style={{ textDecoration: "none" }}>
+            <span className="kk-btn">İlk admin bootstrap</span>
+          </Link>
         </div>
 
-        <EmptyState title={`${brand.name} yönetim iskeleti`}>
-          İlk admin güvenli bootstrap ile oluşturulacak. Supabase service role
-          yalnızca sunucuda; sohbete veya istemciye konmaz.
+        <EmptyState title={`${brand.name} yönetim`}>
+          Açık admin kaydı yoktur. İlk admin{" "}
+          <Link href="/bootstrap">güvenli bootstrap</Link> (secret + service
+          role) ile atanır. Service role sohbete/istemciye konmaz.
         </EmptyState>
       </div>
     </main>

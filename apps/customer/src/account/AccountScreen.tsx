@@ -7,6 +7,7 @@ import {
   buildHttpsDeepLinkUrl,
 } from "@klimacin/shared";
 import { EmptyState } from "@klimacin/ui-native";
+import { AddressForm } from "./AddressForm";
 
 type Props = {
   onBack: () => void;
@@ -53,6 +54,8 @@ export function AccountScreen({ onBack }: Props) {
           · {s}
         </Text>
       ))}
+
+      <AddressForm />
 
       <EmptyState
         title="Oturum / silme RPC"
