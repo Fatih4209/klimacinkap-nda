@@ -1,0 +1,22 @@
+:root {
+  --kk-font-display: var(--font-display), Georgia, serif;
+  --kk-font-sans: var(--font-sans), "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--kk-font-sans);
+}
+
+a {
+  color: inherit;
+}

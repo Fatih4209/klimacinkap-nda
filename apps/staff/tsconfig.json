@@ -1,0 +1,16 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "moduleResolution": "bundler",
+    "paths": {
+      "@klimacin/config": ["../../packages/config/src/index.ts"],
+      "@klimacin/config/*": ["../../packages/config/src/*"],
+      "@klimacin/shared": ["../../packages/shared/src/index.ts"],
+      "@klimacin/shared/*": ["../../packages/shared/src/*"],
+      "@klimacin/ui-native": ["../../packages/ui-native/src/index.ts"],
+      "@klimacin/ui-native/*": ["../../packages/ui-native/src/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}
