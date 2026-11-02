@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@klimacin/config": "workspace:*",
+    "@supabase/supabase-js": "^2.118.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

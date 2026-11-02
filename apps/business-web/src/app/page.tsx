@@ -44,6 +44,12 @@ export default function BusinessHomePage() {
           <Link href="/basvuru">
             <Button>İşletme başvurusu</Button>
           </Link>
+          <Link href="/klima/talepler">
+            <Button>Klima talepleri</Button>
+          </Link>
+          <Link href="/klima/randevular">
+            <Button variant="secondary">Klima randevuları</Button>
+          </Link>
           <Link href="/hesap">
             <Button variant="secondary">Hesap</Button>
           </Link>

@@ -45,9 +45,13 @@ Ortam şablonu: [`.env.example`](./.env.example). Gizli anahtarları sohbete yap
 
 ## Supabase
 
-Migration: `supabase/migrations/20260322000100_init_accounts_roles_addresses.sql`
+Migrations:
 
-- Profiller, roller, adresler, işletme başvurusu, kategori onayı, bölgeler, personel üyelikleri
+- `20260322000100_init_accounts_roles_addresses.sql` — hesaplar, roller, adresler, başvuru
+- `20260322000200_klima_request_offer_appointment.sql` — klima talep/teklif/randevu/ek iş + RPC
+
+Klima RPC özeti: `publish_klima_request`, `submit_klima_offer`, `accept_klima_offer` (geçici hold), `confirm_klima_appointment`, `decide_klima_extra_work`, `complete_klima_appointment` (bekleyen ek iş varsa reddeder).
+
 - RLS açık; işletme `is_active` için onaylı kategori zorunlu
 - SMS Auth / proje bağlantısı dış bağımlılık — bağlanmadan “tamamlandı” sayılmaz
 
