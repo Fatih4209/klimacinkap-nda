@@ -17,11 +17,15 @@
     "./tokens": {
       "types": "./src/tokens.ts",
       "default": "./src/tokens.ts"
+    },
+    "./apps": {
+      "types": "./src/apps.ts",
+      "default": "./src/apps.ts"
     }
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test src/brand.test.ts"
+    "test": "node --import tsx --test src/brand.test.ts src/apps.test.ts"
   },
   "devDependencies": {
     "@types/node": "^20",

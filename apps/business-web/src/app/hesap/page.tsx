@@ -16,6 +16,11 @@ export default function BusinessAccountPage() {
           SMS ile giriş Supabase Auth bağlandığında çalışır. Demo rol değiştirici
           veya auth bypass yoktur.
         </EmptyState>
+        <p style={{ margin: 0 }}>
+          <Link href="/gizlilik">Gizlilik</Link>
+          {" · "}
+          <Link href="/hesap-silme">Hesap silme talebi</Link>
+        </p>
       </div>
     </main>
   );
