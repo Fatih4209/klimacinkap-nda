@@ -31,8 +31,10 @@ import {
 import { KlimaFlow } from "./src/klima/KlimaFlow";
 import { CatalogOrderFlow } from "./src/catalog/CatalogOrderFlow";
 import { NotificationsHub } from "./src/notify/NotificationsHub";
+import { AccountScreen } from "./src/account/AccountScreen";
+import { useCustomerDeepLink } from "./src/linking";
 
-type ActiveFlow = "home" | "klima" | "su" | "tup" | "notify";
+type ActiveFlow = "home" | "klima" | "su" | "tup" | "notify" | "account";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -43,6 +45,7 @@ export default function App() {
   });
   const [bootNote, setBootNote] = useState<string | null>(null);
   const [activeFlow, setActiveFlow] = useState<ActiveFlow>("home");
+  const deepLink = useCustomerDeepLink();
 
   useEffect(() => {
     const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -52,6 +55,17 @@ export default function App() {
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (!deepLink) return;
+    if (deepLink.kind === "privacy" || deepLink.kind === "accountDeletion") {
+      setActiveFlow("account");
+    } else if (deepLink.kind === "klimaRequest") {
+      setActiveFlow("klima");
+    } else if (deepLink.kind === "productOrder") {
+      setActiveFlow("su");
+    }
+  }, [deepLink]);
 
   function onSelectCategory(id: ServiceCategoryId) {
     setActiveFlow(id);
@@ -87,6 +101,15 @@ export default function App() {
               </Text>
             </Pressable>
 
+            <Pressable
+              onPress={() => setActiveFlow("account")}
+              style={styles.notifyBtn}
+            >
+              <Text style={styles.notifyBtnText}>
+                Hesap · Gizlilik · Silme talebi
+              </Text>
+            </Pressable>
+
             <EmptyState
               title="Hesabınız henüz yok"
               body={`SMS ile ${roleLabelsTr.customer.toLowerCase()} kaydı Supabase Auth bağlandığında etkinleşir. Sahte giriş yok.`}
@@ -118,6 +141,10 @@ export default function App() {
 
         {activeFlow === "notify" ? (
           <NotificationsHub onBack={() => setActiveFlow("home")} />
+        ) : null}
+
+        {activeFlow === "account" ? (
+          <AccountScreen onBack={() => setActiveFlow("home")} />
         ) : null}
       </ScrollView>
     </Screen>

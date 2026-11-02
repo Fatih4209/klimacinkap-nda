@@ -7,12 +7,25 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "klimacinkapida-staff",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0E4A56"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.klimacinkapida.staff",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Yalnızca atanmış işte yolda/sahadayken canlı takip için konum kullanılır. İş bitince paylaşım kesilir."
-      }
+        "NSLocationWhenInUseUsageDescription": "Yalnızca atanmış işte yolda/sahadayken canlı takip için konum kullanılır. İş bitince paylaşım kesilir.",
+        "CFBundleAllowMixedLocalizations": true
+      },
+      "associatedDomains": [
+        "applinks:klimacinkapida.com",
+        "applinks:www.klimacinkapida.com"
+      ]
     },
     "android": {
       "package": "com.klimacinkapida.staff",
@@ -23,7 +36,26 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": false,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "klimacinkapida.com",
+              "pathPrefix": "/open/personel"
+            },
+            {
+              "scheme": "https",
+              "host": "www.klimacinkapida.com",
+              "pathPrefix": "/open/personel"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,6 +68,14 @@
           "locationWhenInUsePermission": "Yalnızca atanmış işte yolda/sahadayken canlı takip için konum kullanılır."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "REPLACE_AFTER_EAS_INIT"
+      },
+      "privacyPolicyPath": "/gizlilik",
+      "accountDeletionPath": "/hesap-silme"
+    },
+    "owner": "REPLACE_AFTER_EAS_INIT"
   }
 }

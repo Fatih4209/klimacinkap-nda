@@ -7,9 +7,25 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "klimacinkapida",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0E4A56"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.klimacinkapida.customer"
+      "bundleIdentifier": "com.klimacinkapida.customer",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Adres doğrulama ve haritada konum seçmek için kullanılır. Arka planda konum toplanmaz.",
+        "CFBundleAllowMixedLocalizations": true
+      },
+      "associatedDomains": [
+        "applinks:klimacinkapida.com",
+        "applinks:www.klimacinkapida.com"
+      ]
     },
     "android": {
       "package": "com.klimacinkapida.customer",
@@ -19,11 +35,49 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": false,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "klimacinkapida.com",
+              "pathPrefix": "/open"
+            },
+            {
+              "scheme": "https",
+              "host": "klimacinkapida.com",
+              "pathPrefix": "/gizlilik"
+            },
+            {
+              "scheme": "https",
+              "host": "klimacinkapida.com",
+              "pathPrefix": "/hesap-silme"
+            },
+            {
+              "scheme": "https",
+              "host": "www.klimacinkapida.com",
+              "pathPrefix": "/open"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"]
+    "plugins": ["expo-font"],
+    "extra": {
+      "eas": {
+        "projectId": "REPLACE_AFTER_EAS_INIT"
+      },
+      "privacyPolicyPath": "/gizlilik",
+      "accountDeletionPath": "/hesap-silme"
+    },
+    "owner": "REPLACE_AFTER_EAS_INIT"
   }
 }

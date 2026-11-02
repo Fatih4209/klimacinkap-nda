@@ -53,6 +53,7 @@ Migrations:
 - `20260322000400_staff_assignment_live_tracking.sql` — personel atama + canlı konum
 - `20260322000500_notifications_messaging_issues.sql` — bildirim, mesaj, sorun + push denemeleri
 - `20260322000600_business_subscriptions.sql` — abonelik planları, checkout, yetki, webhook olayları
+- `20260322000700_account_deletion_requests.sql` — hesap silme talebi (pending; sahte completed yok)
 - Edge stub: `supabase/functions/push-dispatch` (EXPO_ACCESS_TOKEN yoksa sent yazmaz)
 - Edge stub: `supabase/functions/payment-webhook` (imza/secret yoksa abonelik aktifleşmez)
 
@@ -70,6 +71,9 @@ Abonelik RPC özeti: `start_subscription_checkout` (anahtar yoksa `blocked_no_pr
 - SMS Auth / proje bağlantısı dış bağımlılık — bağlanmadan “tamamlandı” sayılmaz
 - Push: `EXPO_ACCESS_TOKEN` (+ cihaz token) yoksa entegrasyon hazır, teslimat başarılı sayılmaz
 - Abonelik: hipotez 149 TL/ay (`subscription_plans.price_kurus`); `STRIPE_SECRET_KEY` / `PAYMENT_WEBHOOK_SECRET` yoksa checkout `blocked_no_provider` — sahte tahsilat yok; kart DB’de yok
+- Hesap silme: `request_account_deletion` talep + push/üyelik pasif; `completed` yalnızca admin/ops — anında wipe yok
+- Yayın hazırlığı: `docs/ops-checklist.md`; EAS profilleri `apps/*/eas.json`; gizlilik `/gizlilik`, silme `/hesap-silme`
+- DNS, canlı billing modu ve genel mağaza yayını bu repoda yapılmaz; cihaz yoksa cihaz E2E “geçti” sayılmaz
 
 ## Kurallar (özet)
 

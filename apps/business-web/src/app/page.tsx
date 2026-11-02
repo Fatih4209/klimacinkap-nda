@@ -68,6 +68,12 @@ export default function BusinessHomePage() {
           <Link href="/hesap">
             <Button variant="secondary">Hesap</Button>
           </Link>
+          <Link href="/gizlilik">
+            <Button variant="secondary">Gizlilik</Button>
+          </Link>
+          <Link href="/hesap-silme">
+            <Button variant="secondary">Hesap silme</Button>
+          </Link>
         </section>
 
         {!supabaseReady ? (

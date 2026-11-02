@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,6 +18,8 @@ import { brand, color, space, typography } from "@klimacin/config";
 import { roleLabelsTr } from "@klimacin/shared";
 import { BrandMark, EmptyState, Screen } from "@klimacin/ui-native";
 import { StaffJobsScreen } from "./src/StaffJobsScreen";
+import { StaffAccountScreen } from "./src/account/AccountScreen";
+import { useStaffDeepLink } from "./src/linking";
 
 /**
  * Staff app — separate entry from customer.
@@ -31,6 +34,8 @@ export default function App() {
     "Manrope-Bold": Manrope_700Bold,
   });
   const [bootNote, setBootNote] = useState<string | null>(null);
+  const [showAccount, setShowAccount] = useState(false);
+  const deepLink = useStaffDeepLink();
 
   useEffect(() => {
     if (!process.env.EXPO_PUBLIC_SUPABASE_URL) {
@@ -39,6 +44,12 @@ export default function App() {
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (deepLink?.kind === "assignment") {
+      setShowAccount(false);
+    }
+  }, [deepLink]);
 
   if (!fontsLoaded) {
     return (
@@ -52,17 +63,32 @@ export default function App() {
     <Screen>
       <StatusBar style="dark" />
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.hero}>
-          <BrandMark size="lg" />
-          <Text style={styles.kicker}>{roleLabelsTr.field_staff}</Text>
-          <Text style={styles.slogan}>
-            Atanan işler, durum, canlı konum ve tamamlama kodu — {brand.name}
-          </Text>
-        </View>
+        {showAccount ? (
+          <StaffAccountScreen onBack={() => setShowAccount(false)} />
+        ) : (
+          <>
+            <View style={styles.hero}>
+              <BrandMark size="lg" />
+              <Text style={styles.kicker}>{roleLabelsTr.field_staff}</Text>
+              <Text style={styles.slogan}>
+                Atanan işler, durum, canlı konum ve tamamlama kodu — {brand.name}
+              </Text>
+            </View>
 
-        <StaffJobsScreen />
+            <Pressable
+              onPress={() => setShowAccount(true)}
+              style={styles.accountBtn}
+            >
+              <Text style={styles.accountBtnText}>Hesap · Gizlilik</Text>
+            </Pressable>
 
-        {bootNote ? <EmptyState title="Bağımlılık" body={bootNote} /> : null}
+            <StaffJobsScreen />
+
+            {bootNote ? (
+              <EmptyState title="Bağımlılık" body={bootNote} />
+            ) : null}
+          </>
+        )}
       </ScrollView>
     </Screen>
   );
@@ -95,5 +121,16 @@ const styles = StyleSheet.create({
     fontSize: typography.size.lg,
     lineHeight: typography.size.lg * typography.lineHeight.snug,
     color: color.text.secondary,
+  },
+  accountBtn: {
+    borderWidth: 1,
+    borderColor: color.brand.mid,
+    borderRadius: 999,
+    paddingVertical: space[3],
+    alignItems: "center",
+  },
+  accountBtnText: {
+    color: color.brand.deep,
+    fontWeight: "700",
   },
 });

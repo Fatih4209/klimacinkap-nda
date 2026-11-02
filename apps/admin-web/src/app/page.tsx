@@ -40,6 +40,12 @@ export default function AdminHomePage() {
           <Link href="/bolgeler" style={{ textDecoration: "none" }}>
             <span className="kk-btn kk-btn-secondary">Bölgeler</span>
           </Link>
+          <Link href="/gizlilik" style={{ textDecoration: "none" }}>
+            <span className="kk-btn kk-btn-secondary">Gizlilik</span>
+          </Link>
+          <Link href="/hesap-silme" style={{ textDecoration: "none" }}>
+            <span className="kk-btn kk-btn-secondary">Hesap silme kuyruğu</span>
+          </Link>
         </div>
 
         <EmptyState title={`${brand.name} yönetim iskeleti`}>
