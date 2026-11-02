@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -29,8 +30,9 @@ import {
 } from "@klimacin/ui-native";
 import { KlimaFlow } from "./src/klima/KlimaFlow";
 import { CatalogOrderFlow } from "./src/catalog/CatalogOrderFlow";
+import { NotificationsHub } from "./src/notify/NotificationsHub";
 
-type ActiveFlow = "home" | "klima" | "su" | "tup";
+type ActiveFlow = "home" | "klima" | "su" | "tup" | "notify";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -76,6 +78,15 @@ export default function App() {
 
             <ServiceCategoryGrid onSelect={onSelectCategory} />
 
+            <Pressable
+              onPress={() => setActiveFlow("notify")}
+              style={styles.notifyBtn}
+            >
+              <Text style={styles.notifyBtnText}>
+                Bildirimler · Mesajlar · Sorunlar
+              </Text>
+            </Pressable>
+
             <EmptyState
               title="Hesabınız henüz yok"
               body={`SMS ile ${roleLabelsTr.customer.toLowerCase()} kaydı Supabase Auth bağlandığında etkinleşir. Sahte giriş yok.`}
@@ -104,6 +115,10 @@ export default function App() {
             onBack={() => setActiveFlow("home")}
           />
         ) : null}
+
+        {activeFlow === "notify" ? (
+          <NotificationsHub onBack={() => setActiveFlow("home")} />
+        ) : null}
       </ScrollView>
     </Screen>
   );
@@ -128,5 +143,16 @@ const styles = StyleSheet.create({
     fontSize: typography.size.lg,
     lineHeight: typography.size.lg * typography.lineHeight.snug,
     color: color.text.secondary,
+  },
+  notifyBtn: {
+    borderWidth: 1,
+    borderColor: color.brand.mid,
+    borderRadius: 999,
+    paddingVertical: space[3],
+    alignItems: "center",
+  },
+  notifyBtnText: {
+    color: color.brand.deep,
+    fontWeight: "700",
   },
 });
