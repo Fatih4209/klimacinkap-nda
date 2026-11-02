@@ -9,10 +9,14 @@
     "scheme": "klimacinkapida-staff",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.klimacinkapida.staff"
+      "bundleIdentifier": "com.klimacinkapida.staff",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Yalnızca atanmış işte yolda/sahadayken canlı takip için konum kullanılır. İş bitince paylaşım kesilir."
+      }
     },
     "android": {
       "package": "com.klimacinkapida.staff",
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
       "adaptiveIcon": {
         "backgroundColor": "#0E4A56",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -24,6 +28,14 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"]
+    "plugins": [
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Yalnızca atanmış işte yolda/sahadayken canlı takip için konum kullanılır."
+        }
+      ]
+    ]
   }
 }

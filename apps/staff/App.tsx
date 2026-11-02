@@ -16,10 +16,12 @@ import {
 import { brand, color, space, typography } from "@klimacin/config";
 import { roleLabelsTr } from "@klimacin/shared";
 import { BrandMark, EmptyState, Screen } from "@klimacin/ui-native";
+import { StaffJobsScreen } from "./src/StaffJobsScreen";
 
 /**
  * Staff app — separate entry from customer.
- * No background location on this screen; location only when assigned job requires it (phase e).
+ * Location is requested only while an assignment is en_route/on_site (phase e).
+ * No simulated locations; stale pings are never labeled live by the API.
  */
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -54,14 +56,11 @@ export default function App() {
           <BrandMark size="lg" />
           <Text style={styles.kicker}>{roleLabelsTr.field_staff}</Text>
           <Text style={styles.slogan}>
-            Atanan işler, durum güncelleme ve tamamlama — {brand.name}
+            Atanan işler, durum, canlı konum ve tamamlama kodu — {brand.name}
           </Text>
         </View>
 
-        <EmptyState
-          title="Atanmış iş yok"
-          body="Görevler işletme panelinden atandığında burada görünür. Konum izni yalnızca aktif iş takibi için istenir."
-        />
+        <StaffJobsScreen />
 
         {bootNote ? <EmptyState title="Bağımlılık" body={bootNote} /> : null}
       </ScrollView>
