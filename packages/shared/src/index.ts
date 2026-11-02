@@ -11,3 +11,5 @@ export * from "./klima";
 export * from "./klima-api";
 export * from "./catalog";
 export * from "./catalog-api";
+export * from "./staff";
+export * from "./staff-api";

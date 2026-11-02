@@ -56,6 +56,9 @@ export default function BusinessHomePage() {
           <Link href="/siparisler">
             <Button variant="secondary">Siparişler</Button>
           </Link>
+          <Link href="/personel">
+            <Button>Personel atama</Button>
+          </Link>
           <Link href="/hesap">
             <Button variant="secondary">Hesap</Button>
           </Link>
