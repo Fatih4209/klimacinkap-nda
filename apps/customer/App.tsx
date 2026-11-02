@@ -28,6 +28,9 @@ import {
   ServiceCategoryGrid,
 } from "@klimacin/ui-native";
 import { KlimaFlow } from "./src/klima/KlimaFlow";
+import { CatalogOrderFlow } from "./src/catalog/CatalogOrderFlow";
+
+type ActiveFlow = "home" | "klima" | "su" | "tup";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -37,8 +40,7 @@ export default function App() {
     "Manrope-Bold": Manrope_700Bold,
   });
   const [bootNote, setBootNote] = useState<string | null>(null);
-  const [activeFlow, setActiveFlow] = useState<"home" | "klima">("home");
-  const [categoryNote, setCategoryNote] = useState<string | null>(null);
+  const [activeFlow, setActiveFlow] = useState<ActiveFlow>("home");
 
   useEffect(() => {
     const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -50,16 +52,7 @@ export default function App() {
   }, []);
 
   function onSelectCategory(id: ServiceCategoryId) {
-    if (id === "klima") {
-      setActiveFlow("klima");
-      setCategoryNote(null);
-      return;
-    }
-    setCategoryNote(
-      id === "su"
-        ? "Damacana su siparişi faz (d) kapsamında. Sahte akış yok."
-        : "Tüp siparişi faz (d) kapsamında. Sahte akış yok.",
-    );
+    setActiveFlow(id);
   }
 
   if (!fontsLoaded) {
@@ -83,10 +76,6 @@ export default function App() {
 
             <ServiceCategoryGrid onSelect={onSelectCategory} />
 
-            {categoryNote ? (
-              <EmptyState title="Yakında" body={categoryNote} />
-            ) : null}
-
             <EmptyState
               title="Hesabınız henüz yok"
               body={`SMS ile ${roleLabelsTr.customer.toLowerCase()} kaydı Supabase Auth bağlandığında etkinleşir. Sahte giriş yok.`}
@@ -96,9 +85,25 @@ export default function App() {
               <EmptyState title="Bağımlılık" body={bootNote} />
             ) : null}
           </>
-        ) : (
+        ) : null}
+
+        {activeFlow === "klima" ? (
           <KlimaFlow onBack={() => setActiveFlow("home")} />
-        )}
+        ) : null}
+
+        {activeFlow === "su" ? (
+          <CatalogOrderFlow
+            category="su"
+            onBack={() => setActiveFlow("home")}
+          />
+        ) : null}
+
+        {activeFlow === "tup" ? (
+          <CatalogOrderFlow
+            category="tup"
+            onBack={() => setActiveFlow("home")}
+          />
+        ) : null}
       </ScrollView>
     </Screen>
   );
