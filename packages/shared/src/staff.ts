@@ -119,6 +119,7 @@ export const staffRpcErrors: Record<string, string> = {
     "Konum yalnızca yolda veya sahadayken paylaşılır.",
   STAFF_BAD_COMPLETION_CODE: "Tamamlama kodu hatalı.",
   STAFF_PROFILE_NOT_FOUND: "Personel profili bulunamadı.",
+  SUBSCRIPTION_REQUIRED: "Aktif işletme aboneliği gerekli.",
 };
 
 export function mapStaffErrorMessage(error: { message?: string }): string {

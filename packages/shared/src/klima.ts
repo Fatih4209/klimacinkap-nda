@@ -175,6 +175,7 @@ export const klimaRpcErrors: Record<string, string> = {
     "Onay bekleyen ek iş varken randevu tamamlanamaz.",
   KLIMA_EXTRA_NOT_FOUND: "Ek iş kalemi bulunamadı.",
   KLIMA_EXTRA_NOT_PROPOSED: "Ek iş zaten karara bağlanmış.",
+  SUBSCRIPTION_REQUIRED: "Aktif işletme aboneliği gerekli.",
 };
 
 export function mapKlimaErrorMessage(error: {

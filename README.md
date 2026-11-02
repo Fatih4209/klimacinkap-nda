@@ -52,7 +52,9 @@ Migrations:
 - `20260322000300_su_tup_catalog_orders.sql` — su/tüp katalog, stok, depozito/boş kap, sipariş + RPC
 - `20260322000400_staff_assignment_live_tracking.sql` — personel atama + canlı konum
 - `20260322000500_notifications_messaging_issues.sql` — bildirim, mesaj, sorun + push denemeleri
+- `20260322000600_business_subscriptions.sql` — abonelik planları, checkout, yetki, webhook olayları
 - Edge stub: `supabase/functions/push-dispatch` (EXPO_ACCESS_TOKEN yoksa sent yazmaz)
+- Edge stub: `supabase/functions/payment-webhook` (imza/secret yoksa abonelik aktifleşmez)
 
 Klima RPC özeti: `publish_klima_request`, `submit_klima_offer`, `accept_klima_offer` (geçici hold), `confirm_klima_appointment`, `decide_klima_extra_work`, `complete_klima_appointment` (bekleyen ek iş varsa reddeder).
 
@@ -62,9 +64,12 @@ Personel RPC özeti: `invite_staff_member`, `assign_staff_to_klima_appointment` 
 
 İletişim RPC özeti: `register_push_token`, in-app `notifications`, `send_thread_message`, `open_issue` / `update_issue_status`. Push denemeleri `skipped_no_provider` olabilir; `sent` yalnızca gerçek provider message id ile. Sipariş durumu push’tan değil sunucu tablolarından okunur.
 
+Abonelik RPC özeti: `start_subscription_checkout` (anahtar yoksa `blocked_no_provider`), `cancel_business_subscription`, `business_subscription_is_entitled` / `assert_business_subscription_entitled` (teklif/katalog/atama), `apply_subscription_provider_event` (yalnızca service_role + gerçek provider event id).
+
 - RLS açık; işletme `is_active` için onaylı kategori zorunlu
 - SMS Auth / proje bağlantısı dış bağımlılık — bağlanmadan “tamamlandı” sayılmaz
 - Push: `EXPO_ACCESS_TOKEN` (+ cihaz token) yoksa entegrasyon hazır, teslimat başarılı sayılmaz
+- Abonelik: hipotez 149 TL/ay (`subscription_plans.price_kurus`); `STRIPE_SECRET_KEY` / `PAYMENT_WEBHOOK_SECRET` yoksa checkout `blocked_no_provider` — sahte tahsilat yok; kart DB’de yok
 
 ## Kurallar (özet)
 

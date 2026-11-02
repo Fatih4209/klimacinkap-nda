@@ -172,6 +172,7 @@ export const catalogRpcErrors: Record<string, string> = {
   CATALOG_STOCK_CONSUME_FAILED: "Stok düşümü başarısız.",
   TUP_NO_INSTALL_GUIDANCE:
     "Tüp ürün açıklamasında kurulum/tehlikeli yönlendirme olamaz.",
+  SUBSCRIPTION_REQUIRED: "Aktif işletme aboneliği gerekli.",
 };
 
 export function mapCatalogErrorMessage(error: {
