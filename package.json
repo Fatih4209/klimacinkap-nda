@@ -1,0 +1,23 @@
+{
+  "name": "klimacin-kapida",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "dev:customer": "pnpm --filter @klimacin/customer start",
+    "dev:staff": "pnpm --filter @klimacin/staff start",
+    "dev:business": "pnpm --filter @klimacin/business-web dev",
+    "dev:admin": "pnpm --filter @klimacin/admin-web dev",
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "lint": "pnpm -r --if-present run lint",
+    "build": "pnpm -r --if-present run build",
+    "test": "pnpm -r --if-present run test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "~5.9.2"
+  }
+}

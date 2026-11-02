@@ -1,0 +1,39 @@
+{
+  "name": "@klimacin/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./roles": {
+      "types": "./src/roles.ts",
+      "default": "./src/roles.ts"
+    },
+    "./money": {
+      "types": "./src/money.ts",
+      "default": "./src/money.ts"
+    },
+    "./datetime": {
+      "types": "./src/datetime.ts",
+      "default": "./src/datetime.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "@klimacin/config": "workspace:*",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

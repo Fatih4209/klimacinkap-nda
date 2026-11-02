@@ -1,0 +1,117 @@
+:root {
+  --kk-brand-ink: #0b2c34;
+  --kk-brand-deep: #0e4a56;
+  --kk-brand-mid: #1a6b78;
+  --kk-brand-soft: #d7ecf0;
+  --kk-brand-mist: #eef6f8;
+  --kk-klima: #1f7aad;
+  --kk-klima-soft: #d6eaf6;
+  --kk-su: #1a9a8c;
+  --kk-su-soft: #d4f0ec;
+  --kk-tup: #c46a2d;
+  --kk-tup-soft: #f6e4d6;
+  --kk-surface: #f3f7f8;
+  --kk-surface-raised: #ffffff;
+  --kk-text: #0f1c24;
+  --kk-text-secondary: #4a5c66;
+  --kk-text-muted: #6e818a;
+  --kk-border: #d2dee2;
+  --kk-radius-md: 12px;
+  --kk-font-display: "Fraunces", Georgia, serif;
+  --kk-font-sans: "Manrope", "Segoe UI", sans-serif;
+}
+
+.kk-page {
+  min-height: 100vh;
+  color: var(--kk-text);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, var(--kk-brand-soft), transparent 60%),
+    radial-gradient(900px 500px at 90% 0%, #e4f3ef, transparent 55%),
+    linear-gradient(180deg, var(--kk-brand-mist), var(--kk-surface));
+  font-family: var(--kk-font-sans);
+}
+
+.kk-brand-mark {
+  font-family: var(--kk-font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--kk-brand-ink);
+}
+
+.kk-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 720px) {
+  .kk-category-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kk-category-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--kk-border);
+  border-radius: var(--kk-radius-md);
+  background: var(--kk-surface-raised);
+  text-align: left;
+  transition: transform 280ms ease, box-shadow 280ms ease;
+}
+
+.kk-category-tile:hover,
+.kk-category-tile:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(11, 44, 52, 0.08);
+  outline: none;
+}
+
+.kk-category-tile[data-accent="klima"] {
+  border-top: 3px solid var(--kk-klima);
+}
+
+.kk-category-tile[data-accent="su"] {
+  border-top: 3px solid var(--kk-su);
+}
+
+.kk-category-tile[data-accent="tup"] {
+  border-top: 3px solid var(--kk-tup);
+}
+
+.kk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.7rem 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--kk-brand-deep);
+  color: #f7fbfc;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.kk-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.kk-btn-secondary {
+  background: transparent;
+  color: var(--kk-brand-deep);
+  border: 1px solid var(--kk-brand-mid);
+}
+
+.kk-empty {
+  padding: 1.5rem;
+  border: 1px dashed var(--kk-border);
+  border-radius: var(--kk-radius-md);
+  color: var(--kk-text-secondary);
+  background: rgba(255, 255, 255, 0.55);
+}

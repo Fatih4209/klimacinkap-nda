@@ -1,1 +1,58 @@
-# klimacinkap-nda
+# Klimacın Kapıda
+
+Klima servisi, su ve tüp. Tek uygulamayla kapında.
+
+Türkiye’de şehir/ilçe bazında klima bakım/onarım/montaj, damacana su ve tüp siparişini müşterilerle buluşturan yerel hizmet platformu.
+
+> Hedef alan adı: `klimacinkapida.com` — bu repoda DNS/yayın yapılmaz.
+
+## Monorepo
+
+| Yol | Açıklama |
+| --- | --- |
+| `apps/customer` | Müşteri mobil (Expo development build) |
+| `apps/staff` | Saha personeli mobil (ayrı giriş; müşteriye gereksiz BG konum yok) |
+| `apps/business-web` | İşletme paneli (Next.js) |
+| `apps/admin-web` | Platform yönetim paneli (Next.js) |
+| `packages/config` | Merkezi marka + tasarım tokenları |
+| `packages/shared` | Roller, adres, başvuru şemaları, para/zaman yardımcıları |
+| `packages/ui` | Web tasarım sistemi |
+| `packages/ui-native` | React Native tasarım sistemi (**ayrı paket**; `@klimacin/ui/native` subpath yok) |
+| `supabase/` | Postgres şema / RLS başlangıcı |
+
+## Marka
+
+Tüm yüzeyler `@klimacin/config` üzerinden okur:
+
+- Ad: **Klimacın Kapıda**
+- Slogan: Klima servisi, su ve tüp. Tek uygulamayla kapında.
+- Ana ekranda Klima / Su / Tüp eşit görünürlük
+
+## Geliştirme
+
+```bash
+pnpm install
+pnpm typecheck
+pnpm --filter @klimacin/config test
+pnpm --filter @klimacin/shared test
+pnpm --filter @klimacin/business-web dev
+pnpm --filter @klimacin/admin-web dev
+pnpm --filter @klimacin/customer start
+pnpm --filter @klimacin/staff start
+```
+
+Ortam şablonu: [`.env.example`](./.env.example). Gizli anahtarları sohbete yapıştırmayın.
+
+## Supabase
+
+Migration: `supabase/migrations/20260322000100_init_accounts_roles_addresses.sql`
+
+- Profiller, roller, adresler, işletme başvurusu, kategori onayı, bölgeler, personel üyelikleri
+- RLS açık; işletme `is_active` için onaylı kategori zorunlu
+- SMS Auth / proje bağlantısı dış bağımlılık — bağlanmadan “tamamlandı” sayılmaz
+
+## Kurallar (özet)
+
+- Demo/mock işletme, sahte fiyat, auth bypass yok
+- Tutarlar kuruş (integer); DB saatleri UTC; gösterim `Europe/Istanbul`
+- Expo Go teslim ölçütü değil — development build hedeflenir
