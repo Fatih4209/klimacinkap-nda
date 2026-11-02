@@ -7,16 +7,19 @@ import {
   View,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import {
-  useFonts,
-  Fraunces_700Bold,
-} from "@expo-google-fonts/fraunces";
+import { Fraunces_700Bold, useFonts } from "@expo-google-fonts/fraunces";
 import {
   Manrope_400Regular,
   Manrope_600SemiBold,
   Manrope_700Bold,
 } from "@expo-google-fonts/manrope";
-import { brand, color, space, typography } from "@klimacin/config";
+import {
+  brand,
+  color,
+  space,
+  typography,
+  type ServiceCategoryId,
+} from "@klimacin/config";
 import { roleLabelsTr } from "@klimacin/shared";
 import {
   BrandMark,
@@ -24,6 +27,7 @@ import {
   Screen,
   ServiceCategoryGrid,
 } from "@klimacin/ui-native";
+import { KlimaFlow } from "./src/klima/KlimaFlow";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -33,6 +37,8 @@ export default function App() {
     "Manrope-Bold": Manrope_700Bold,
   });
   const [bootNote, setBootNote] = useState<string | null>(null);
+  const [activeFlow, setActiveFlow] = useState<"home" | "klima">("home");
+  const [categoryNote, setCategoryNote] = useState<string | null>(null);
 
   useEffect(() => {
     const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -42,6 +48,19 @@ export default function App() {
       );
     }
   }, []);
+
+  function onSelectCategory(id: ServiceCategoryId) {
+    if (id === "klima") {
+      setActiveFlow("klima");
+      setCategoryNote(null);
+      return;
+    }
+    setCategoryNote(
+      id === "su"
+        ? "Damacana su siparişi faz (d) kapsamında. Sahte akış yok."
+        : "Tüp siparişi faz (d) kapsamında. Sahte akış yok.",
+    );
+  }
 
   if (!fontsLoaded) {
     return (
@@ -55,21 +74,31 @@ export default function App() {
     <Screen>
       <StatusBar style="dark" />
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.hero}>
-          <BrandMark size="hero" />
-          <Text style={styles.slogan}>{brand.slogan}</Text>
-        </View>
+        {activeFlow === "home" ? (
+          <>
+            <View style={styles.hero}>
+              <BrandMark size="hero" />
+              <Text style={styles.slogan}>{brand.slogan}</Text>
+            </View>
 
-        <ServiceCategoryGrid
-          footerNote="Klima, Su ve Tüp eşit hizmetlerdir. Seçim için giriş ve adres gerekir."
-        />
+            <ServiceCategoryGrid onSelect={onSelectCategory} />
 
-        <EmptyState
-          title="Hesabınız henüz yok"
-          body={`SMS ile ${roleLabelsTr.customer.toLowerCase()} kaydı Supabase Auth bağlandığında etkinleşir. Sahte giriş yok.`}
-        />
+            {categoryNote ? (
+              <EmptyState title="Yakında" body={categoryNote} />
+            ) : null}
 
-        {bootNote ? <EmptyState title="Bağımlılık" body={bootNote} /> : null}
+            <EmptyState
+              title="Hesabınız henüz yok"
+              body={`SMS ile ${roleLabelsTr.customer.toLowerCase()} kaydı Supabase Auth bağlandığında etkinleşir. Sahte giriş yok.`}
+            />
+
+            {bootNote ? (
+              <EmptyState title="Bağımlılık" body={bootNote} />
+            ) : null}
+          </>
+        ) : (
+          <KlimaFlow onBack={() => setActiveFlow("home")} />
+        )}
       </ScrollView>
     </Screen>
   );
