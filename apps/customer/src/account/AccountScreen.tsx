@@ -8,6 +8,8 @@ import {
 } from "@klimacin/shared";
 import { EmptyState } from "@klimacin/ui-native";
 import { AddressForm } from "./AddressForm";
+import { SmsOtpScreen } from "../auth/SmsOtpScreen";
+import { DeletionRequestForm } from "./DeletionRequestForm";
 
 type Props = {
   onBack: () => void;
@@ -55,11 +57,13 @@ export function AccountScreen({ onBack }: Props) {
         </Text>
       ))}
 
+      <SmsOtpScreen />
       <AddressForm />
+      <DeletionRequestForm />
 
       <EmptyState
-        title="Oturum / silme RPC"
-        body={`SMS Auth + request_account_deletion gerekir. Derin bağlantı (DNS sonrası): ${deletionHttps}. Özel şema: ${privacyScheme}`}
+        title="Derin bağlantılar"
+        body={`DNS sonrası: ${deletionHttps}. Özel şema: ${privacyScheme}`}
       />
     </View>
   );

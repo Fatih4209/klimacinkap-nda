@@ -124,7 +124,7 @@ export const klimaOfferComparisonSchema = z.object({
 
 export type KlimaOfferComparison = z.infer<typeof klimaOfferComparisonSchema>;
 
-export type KlimaOfferSortKey = "price" | "eta" | "completed";
+export type KlimaOfferSortKey = "price" | "eta" | "rating" | "completed";
 
 export function sortKlimaOffers(
   offers: KlimaOfferComparison[],
@@ -132,6 +132,16 @@ export function sortKlimaOffers(
 ): KlimaOfferComparison[] {
   const copy = [...offers];
   copy.sort((a, b) => {
+    if (sortBy === "rating") {
+      const aR = a.ratingAverage;
+      const bR = b.ratingAverage;
+      if (aR == null && bR == null) {
+        return b.completedCount - a.completedCount;
+      }
+      if (aR == null) return 1;
+      if (bR == null) return -1;
+      return bR - aR || b.completedCount - a.completedCount;
+    }
     if (sortBy === "price") {
       const aTotal = a.priceKurus + a.diagnosisFeeKurus;
       const bTotal = b.priceKurus + b.diagnosisFeeKurus;

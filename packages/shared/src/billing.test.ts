@@ -76,6 +76,21 @@ test("stripe provider returns session only with real id+url", async () => {
   }
 });
 
+test("stripe webhook verify never claims ok without crypto wiring", () => {
+  const provider = createStripePaymentProvider({
+    secretKey: "sk_test_x",
+    webhookSecret: "whsec_test",
+  });
+  const result = provider.verifyWebhookSignature({
+    rawBody: "{}",
+    signatureHeader: "t=1,v1=abc",
+  });
+  assert.equal(result.ok, false);
+  if (!result.ok) {
+    assert.equal(result.errorCode, "PAYMENT_WEBHOOK_VERIFY_NOT_WIRED");
+  }
+});
+
 test("maps subscription required error", () => {
   assert.match(
     mapBillingErrorMessage({ message: "SUBSCRIPTION_REQUIRED" }),

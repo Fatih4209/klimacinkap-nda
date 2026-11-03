@@ -175,13 +175,38 @@ export async function inviteStaffMember(
   client: SupabaseClient,
   businessId: string,
   staffProfileId: string,
-): Promise<StaffApiResult<{ id: string }>> {
+): Promise<StaffApiResult<{ id: string; inviteToken: string | null; isActive: boolean }>> {
   const { data, error } = await client.rpc("invite_staff_member", {
     p_business_id: businessId,
     p_staff_profile_id: staffProfileId,
   });
   if (error || !data) {
     return fail(error ?? { message: "STAFF_PROFILE_NOT_FOUND" });
+  }
+  const row = data as {
+    id: string;
+    invite_token?: string | null;
+    is_active?: boolean;
+  };
+  return {
+    ok: true,
+    data: {
+      id: row.id,
+      inviteToken: row.invite_token ?? null,
+      isActive: Boolean(row.is_active),
+    },
+  };
+}
+
+export async function acceptStaffInvite(
+  client: SupabaseClient,
+  inviteToken: string,
+): Promise<StaffApiResult<{ id: string }>> {
+  const { data, error } = await client.rpc("accept_staff_invite", {
+    p_invite_token: inviteToken,
+  });
+  if (error || !data) {
+    return fail(error ?? { message: "STAFF_INVITE_NOT_FOUND" });
   }
   return { ok: true, data: { id: (data as { id: string }).id } };
 }

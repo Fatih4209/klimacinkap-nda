@@ -55,6 +55,7 @@ Migrations:
 - `20260322000600_business_subscriptions.sql` — abonelik planları, checkout, yetki, webhook olayları
 - `20260322000700_account_deletion_requests.sql` — hesap silme talebi (pending; sahte completed yok)
 - `20260322000800_accounts_bootstrap_applications.sql` — başvuru draft/submit, admin inceleme, bölge upsert, ilk admin bootstrap (service_role)
+- `20260322000900_ratings_staff_invite_storage.sql` — iş puanları, pending personel daveti, private `job-attachments` bucket
 - Edge stub: `supabase/functions/push-dispatch` (EXPO_ACCESS_TOKEN yoksa sent yazmaz)
 - Edge stub: `supabase/functions/payment-webhook` (imza/secret yoksa abonelik aktifleşmez)
 

@@ -6,7 +6,15 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { color, space, typography } from "@klimacin/config";
+// Pressable/View used for TR city chips
+import {
+  color,
+  getTrCity,
+  listTrDistricts,
+  space,
+  trCities,
+  typography,
+} from "@klimacin/config";
 import {
   getSupabaseBrowserClient,
   resolvePublicSupabaseEnv,
@@ -17,7 +25,7 @@ import { EmptyState } from "@klimacin/ui-native";
 export function AddressForm() {
   const client = getSupabaseBrowserClient(resolvePublicSupabaseEnv());
   const [cityCode, setCityCode] = useState("34");
-  const [cityName, setCityName] = useState("İstanbul");
+  const [cityName, setCityName] = useState(getTrCity("34")?.name ?? "İstanbul");
   const [districtCode, setDistrictCode] = useState("");
   const [districtName, setDistrictName] = useState("");
   const [line1, setLine1] = useState("");
@@ -25,6 +33,7 @@ export function AddressForm() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const districts = listTrDistricts(cityCode);
 
   if (!client) {
     return (
@@ -77,34 +86,62 @@ export function AddressForm() {
         placeholder="Etiket"
         placeholderTextColor={color.text.muted}
       />
+      <Text style={styles.hint}>
+        İl ({trCities.length} il statik; harita API yok)
+      </Text>
+      <View style={styles.row}>
+        {["34", "06", "35", "16", "07"].map((code) => (
+          <Pressable
+            key={code}
+            style={styles.chip}
+            onPress={() => {
+              setCityCode(code);
+              setCityName(getTrCity(code)?.name ?? "");
+              setDistrictCode("");
+              setDistrictName("");
+            }}
+          >
+            <Text style={styles.chipText}>{getTrCity(code)?.name}</Text>
+          </Pressable>
+        ))}
+      </View>
       <TextInput
         style={styles.input}
-        value={cityCode}
-        onChangeText={setCityCode}
-        placeholder="İl kodu"
-        placeholderTextColor={color.text.muted}
+        value={`${cityCode} · ${cityName}`}
+        editable={false}
       />
-      <TextInput
-        style={styles.input}
-        value={cityName}
-        onChangeText={setCityName}
-        placeholder="İl"
-        placeholderTextColor={color.text.muted}
-      />
-      <TextInput
-        style={styles.input}
-        value={districtCode}
-        onChangeText={setDistrictCode}
-        placeholder="İlçe kodu"
-        placeholderTextColor={color.text.muted}
-      />
-      <TextInput
-        style={styles.input}
-        value={districtName}
-        onChangeText={setDistrictName}
-        placeholder="İlçe"
-        placeholderTextColor={color.text.muted}
-      />
+      {districts.length > 0 ? (
+        <View style={styles.row}>
+          {districts.slice(0, 8).map((d) => (
+            <Pressable
+              key={d.code}
+              style={styles.chip}
+              onPress={() => {
+                setDistrictCode(d.code);
+                setDistrictName(d.name);
+              }}
+            >
+              <Text style={styles.chipText}>{d.name}</Text>
+            </Pressable>
+          ))}
+        </View>
+      ) : (
+        <TextInput
+          style={styles.input}
+          value={districtName}
+          onChangeText={(v) => {
+            setDistrictName(v);
+            setDistrictCode(`${cityCode}-m`);
+          }}
+          placeholder="İlçe (manuel)"
+          placeholderTextColor={color.text.muted}
+        />
+      )}
+      {districtName ? (
+        <Text style={styles.hint}>
+          Seçili ilçe: {districtName} ({districtCode})
+        </Text>
+      ) : null}
       <TextInput
         style={styles.input}
         value={line1}
@@ -155,4 +192,14 @@ const styles = StyleSheet.create({
     color: color.text.inverse,
     fontWeight: "700",
   },
+  hint: { color: color.text.muted, fontSize: typography.size.xs },
+  row: { flexDirection: "row", flexWrap: "wrap", gap: space[2] },
+  chip: {
+    borderWidth: 1,
+    borderColor: color.border.subtle,
+    borderRadius: 999,
+    paddingHorizontal: space[3],
+    paddingVertical: space[1],
+  },
+  chipText: { fontSize: typography.size.xs, color: color.brand.deep },
 });

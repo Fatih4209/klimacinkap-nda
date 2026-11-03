@@ -13,7 +13,9 @@ EAS: `apps/customer/eas.json`, `apps/staff/eas.json` — profiller `development`
 
 ## Ortam
 
-- [ ] Supabase proje + migrations `20260322000100` … `00700` apply
+- [ ] Supabase proje + migrations `20260322000100` … `00900` apply
+- [ ] `ADMIN_BOOTSTRAP_SECRET` (≥16) + service role — ilk admin; açık kayıt yok
+- [ ] Private bucket `job-attachments` (migration 009; public=false)
 - [ ] SMS Auth (Twilio/MessageBird vb.) — gerçek OTP
 - [ ] `NEXT_PUBLIC_*` / `EXPO_PUBLIC_*` URL + anon key
 - [ ] `SUPABASE_SERVICE_ROLE_KEY` yalnızca sunucu/edge

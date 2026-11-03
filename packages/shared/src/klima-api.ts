@@ -172,6 +172,7 @@ export async function listKlimaOfferComparisons(
 
   const businessIds = (offers ?? []).map((o) => o.business_id as string);
   const statsByBusiness = new Map<string, number>();
+  const ratingByBusiness = new Map<string, number>();
 
   if (businessIds.length > 0) {
     const { data: stats, error: statsError } = await client
@@ -188,6 +189,20 @@ export async function listKlimaOfferComparisons(
         Number(row.completed_count ?? 0),
       );
     }
+
+    const { data: ratings } = await client
+      .from("business_rating_stats")
+      .select("business_id, rating_average")
+      .in("business_id", businessIds);
+    for (const row of ratings ?? []) {
+      const avg = row.rating_average;
+      if (avg != null) {
+        ratingByBusiness.set(
+          row.business_id as string,
+          Number(avg),
+        );
+      }
+    }
   }
 
   const comparisons: KlimaOfferComparison[] = (offers ?? []).map((offer) => {
@@ -198,17 +213,18 @@ export async function listKlimaOfferComparisons(
     const tradeName = Array.isArray(business)
       ? (business[0]?.trade_name ?? "İşletme")
       : (business?.trade_name ?? "İşletme");
+    const bid = offer.business_id as string;
 
     return {
       offerId: offer.id as string,
-      businessId: offer.business_id as string,
+      businessId: bid,
       tradeName,
       priceKurus: offer.price_kurus as number,
       diagnosisFeeKurus: offer.diagnosis_fee_kurus as number,
       scopeSummary: offer.scope_summary as string,
       etaMinutes: offer.eta_minutes as number,
-      completedCount: statsByBusiness.get(offer.business_id as string) ?? 0,
-      ratingAverage: null,
+      completedCount: statsByBusiness.get(bid) ?? 0,
+      ratingAverage: ratingByBusiness.get(bid) ?? null,
     };
   });
 
