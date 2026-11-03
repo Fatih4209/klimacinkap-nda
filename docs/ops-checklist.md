@@ -13,12 +13,18 @@ EAS: `apps/customer/eas.json`, `apps/staff/eas.json` — profiller `development`
 
 ## Ortam
 
-- [ ] Supabase proje + migrations `20260322000100` … `00900` apply
-- [ ] `ADMIN_BOOTSTRAP_SECRET` (≥16) + service role — ilk admin; açık kayıt yok
+### Bu proje (URL only — anahtarları sohbete yapıştırma)
+
+- Project URL: `https://trqdqohhqtdeznkhminh.supabase.co`
+- project-ref: `trqdqohhqtdeznkhminh`
+- [ ] Dashboard → Settings → API: `anon` + `service_role` → **yalnızca lokal** `.env.local` / `apps/customer/.env` / `apps/staff/.env` (şablon: `.env.example`)
+- [ ] `NEXT_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_URL` = yukarıdaki URL
+- [ ] `npx supabase link --project-ref trqdqohhqtdeznkhminh` ardından `npx supabase db push` (migrations `00100`…`00900`)
+- [ ] Alternatif: SQL Editor’da migration dosyalarını artan sırada çalıştır
+- [ ] Authentication → Providers → Phone enable + SMS sağlayıcı
+- [ ] `ADMIN_BOOTSTRAP_SECRET` (≥16) + service role — admin-web `/bootstrap` (açık kayıt yok)
 - [ ] Private bucket `job-attachments` (migration 009; public=false)
-- [ ] SMS Auth (Twilio/MessageBird vb.) — gerçek OTP
-- [ ] `NEXT_PUBLIC_*` / `EXPO_PUBLIC_*` URL + anon key
-- [ ] `SUPABASE_SERVICE_ROLE_KEY` yalnızca sunucu/edge
+- [ ] Smoke: business `/hesap` OTP UI; `select count(*) from subscription_plans;`
 - [ ] Push: `EXPO_ACCESS_TOKEN` (+ cihaz token); yoksa `skipped_no_provider`
 - [ ] Billing: `STRIPE_SECRET_KEY` + `PAYMENT_WEBHOOK_SECRET`; yoksa `blocked_no_provider` — sahte `succeeded` yok
 - [ ] Canlı Stripe modu kullanıcı onayı olmadan açılmaz
