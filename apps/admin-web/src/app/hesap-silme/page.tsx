@@ -1,4 +1,3 @@
-import { brand } from "@klimacin/config";
 import { ACCOUNT_DELETION_STEPS_TR } from "@klimacin/shared";
 import { BrandMark } from "@klimacin/ui";
 import Link from "next/link";
