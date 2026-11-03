@@ -65,6 +65,9 @@ export default function BusinessHomePage() {
           <Link href="/abonelik">
             <Button>Abonelik</Button>
           </Link>
+          <Link href="/kpi">
+            <Button variant="secondary">KPI</Button>
+          </Link>
           <Link href="/hesap">
             <Button variant="secondary">Hesap</Button>
           </Link>

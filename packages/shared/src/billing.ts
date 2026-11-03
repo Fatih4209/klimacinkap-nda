@@ -224,9 +224,6 @@ export function createStripePaymentProvider(
       if (!config.webhookSecret?.trim()) {
         return createNullPaymentProvider().verifyWebhookSignature(input);
       }
-      // Stripe signature verification needs crypto timing-safe compare of
-      // signed payload. Full verify runs on edge with stripe SDK; here we
-      // refuse empty signatures rather than invent validity.
       if (!input.signatureHeader?.trim() || !input.rawBody) {
         return {
           ok: false,
@@ -234,7 +231,14 @@ export function createStripePaymentProvider(
           errorDetail: "Missing signature or body",
         };
       }
-      return { ok: true };
+      // Do not claim verified without Stripe SDK constructEvent / timing-safe
+      // HMAC. Edge function also returns VERIFY_NOT_WIRED until wired.
+      return {
+        ok: false,
+        errorCode: "PAYMENT_WEBHOOK_VERIFY_NOT_WIRED",
+        errorDetail:
+          "Stripe signature crypto verify not wired in shared provider; dependency recorded.",
+      };
     },
   };
 }

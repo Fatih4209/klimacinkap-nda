@@ -20,6 +20,8 @@ import { BrandMark, EmptyState, Screen } from "@klimacin/ui-native";
 import { StaffJobsScreen } from "./src/StaffJobsScreen";
 import { StaffAccountScreen } from "./src/account/AccountScreen";
 import { useStaffDeepLink } from "./src/linking";
+import { StaffSmsOtpScreen } from "./src/auth/SmsOtpScreen";
+import { AcceptInviteScreen } from "./src/invite/AcceptInviteScreen";
 
 /**
  * Staff app — separate entry from customer.
@@ -82,6 +84,8 @@ export default function App() {
               <Text style={styles.accountBtnText}>Hesap · Gizlilik</Text>
             </Pressable>
 
+            <StaffSmsOtpScreen />
+            <AcceptInviteScreen />
             <StaffJobsScreen />
 
             {bootNote ? (

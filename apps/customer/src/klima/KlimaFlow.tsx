@@ -369,6 +369,7 @@ export function KlimaFlow({ onBack }: { onBack: () => void }) {
               [
                 ["price", "Fiyat"],
                 ["eta", "Erken"],
+                ["rating", "Puan"],
                 ["completed", "Tamamlanan"],
               ] as const
             ).map(([key, label]) => (

@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Pressable,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -14,27 +12,25 @@ import {
   Manrope_600SemiBold,
   Manrope_700Bold,
 } from "@expo-google-fonts/manrope";
-import {
-  brand,
-  color,
-  space,
-  typography,
-  type ServiceCategoryId,
-} from "@klimacin/config";
-import { roleLabelsTr } from "@klimacin/shared";
-import {
-  BrandMark,
-  EmptyState,
-  Screen,
-  ServiceCategoryGrid,
-} from "@klimacin/ui-native";
+import { color, space, type ServiceCategoryId } from "@klimacin/config";
+import { Screen } from "@klimacin/ui-native";
 import { KlimaFlow } from "./src/klima/KlimaFlow";
 import { CatalogOrderFlow } from "./src/catalog/CatalogOrderFlow";
 import { NotificationsHub } from "./src/notify/NotificationsHub";
 import { AccountScreen } from "./src/account/AccountScreen";
 import { useCustomerDeepLink } from "./src/linking";
+import {
+  CustomerTabs,
+  type CustomerTab,
+} from "./src/navigation/CustomerTabs";
+import { HomeScreen } from "./src/home/HomeScreen";
+import { OrdersScreen } from "./src/orders/OrdersScreen";
 
-type ActiveFlow = "home" | "klima" | "su" | "tup" | "notify" | "account";
+type ActiveFlow =
+  | "tabs"
+  | "klima"
+  | "su"
+  | "tup";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -43,32 +39,24 @@ export default function App() {
     "Manrope-SemiBold": Manrope_600SemiBold,
     "Manrope-Bold": Manrope_700Bold,
   });
-  const [bootNote, setBootNote] = useState<string | null>(null);
-  const [activeFlow, setActiveFlow] = useState<ActiveFlow>("home");
+  const [tab, setTab] = useState<CustomerTab>("home");
+  const [flow, setFlow] = useState<ActiveFlow>("tabs");
   const deepLink = useCustomerDeepLink();
-
-  useEffect(() => {
-    const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
-    if (!url) {
-      setBootNote(
-        "Supabase henüz bağlanmadı. Hesap, adres ve sipariş akışları anahtarlar eklendikten sonra açılacak.",
-      );
-    }
-  }, []);
 
   useEffect(() => {
     if (!deepLink) return;
     if (deepLink.kind === "privacy" || deepLink.kind === "accountDeletion") {
-      setActiveFlow("account");
+      setFlow("tabs");
+      setTab("account");
     } else if (deepLink.kind === "klimaRequest") {
-      setActiveFlow("klima");
+      setFlow("klima");
     } else if (deepLink.kind === "productOrder") {
-      setActiveFlow("su");
+      setFlow("su");
     }
   }, [deepLink]);
 
   function onSelectCategory(id: ServiceCategoryId) {
-    setActiveFlow(id);
+    setFlow(id);
   }
 
   if (!fontsLoaded) {
@@ -79,74 +67,41 @@ export default function App() {
     );
   }
 
+  const showTabs = flow === "tabs";
+
   return (
     <Screen>
       <StatusBar style="dark" />
-      <ScrollView contentContainerStyle={styles.content}>
-        {activeFlow === "home" ? (
-          <>
-            <View style={styles.hero}>
-              <BrandMark size="hero" />
-              <Text style={styles.slogan}>{brand.slogan}</Text>
-            </View>
-
-            <ServiceCategoryGrid onSelect={onSelectCategory} />
-
-            <Pressable
-              onPress={() => setActiveFlow("notify")}
-              style={styles.notifyBtn}
-            >
-              <Text style={styles.notifyBtnText}>
-                Bildirimler · Mesajlar · Sorunlar
-              </Text>
-            </Pressable>
-
-            <Pressable
-              onPress={() => setActiveFlow("account")}
-              style={styles.notifyBtn}
-            >
-              <Text style={styles.notifyBtnText}>
-                Hesap · Gizlilik · Silme talebi
-              </Text>
-            </Pressable>
-
-            <EmptyState
-              title="Hesabınız henüz yok"
-              body={`SMS ile ${roleLabelsTr.customer.toLowerCase()} kaydı Supabase Auth bağlandığında etkinleşir. Sahte giriş yok.`}
+      <View style={styles.shell}>
+        <ScrollView contentContainerStyle={styles.content}>
+          {showTabs && tab === "home" ? (
+            <HomeScreen
+              onSelectCategory={onSelectCategory}
+              onOpenOrders={() => setTab("orders")}
             />
+          ) : null}
+          {showTabs && tab === "orders" ? <OrdersScreen /> : null}
+          {showTabs && tab === "notify" ? (
+            <NotificationsHub onBack={() => setTab("home")} />
+          ) : null}
+          {showTabs && tab === "account" ? (
+            <AccountScreen onBack={() => setTab("home")} />
+          ) : null}
 
-            {bootNote ? (
-              <EmptyState title="Bağımlılık" body={bootNote} />
-            ) : null}
-          </>
+          {flow === "klima" ? (
+            <KlimaFlow onBack={() => setFlow("tabs")} />
+          ) : null}
+          {flow === "su" ? (
+            <CatalogOrderFlow category="su" onBack={() => setFlow("tabs")} />
+          ) : null}
+          {flow === "tup" ? (
+            <CatalogOrderFlow category="tup" onBack={() => setFlow("tabs")} />
+          ) : null}
+        </ScrollView>
+        {showTabs ? (
+          <CustomerTabs active={tab} onChange={setTab} />
         ) : null}
-
-        {activeFlow === "klima" ? (
-          <KlimaFlow onBack={() => setActiveFlow("home")} />
-        ) : null}
-
-        {activeFlow === "su" ? (
-          <CatalogOrderFlow
-            category="su"
-            onBack={() => setActiveFlow("home")}
-          />
-        ) : null}
-
-        {activeFlow === "tup" ? (
-          <CatalogOrderFlow
-            category="tup"
-            onBack={() => setActiveFlow("home")}
-          />
-        ) : null}
-
-        {activeFlow === "notify" ? (
-          <NotificationsHub onBack={() => setActiveFlow("home")} />
-        ) : null}
-
-        {activeFlow === "account" ? (
-          <AccountScreen onBack={() => setActiveFlow("home")} />
-        ) : null}
-      </ScrollView>
+      </View>
     </Screen>
   );
 }
@@ -158,28 +113,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: color.surface.base,
   },
+  shell: { flex: 1 },
   content: {
     gap: space[6],
     paddingBottom: space[10],
-  },
-  hero: {
-    gap: space[3],
-  },
-  slogan: {
-    fontFamily: typography.fontFamily.sans,
-    fontSize: typography.size.lg,
-    lineHeight: typography.size.lg * typography.lineHeight.snug,
-    color: color.text.secondary,
-  },
-  notifyBtn: {
-    borderWidth: 1,
-    borderColor: color.brand.mid,
-    borderRadius: 999,
-    paddingVertical: space[3],
-    alignItems: "center",
-  },
-  notifyBtnText: {
-    color: color.brand.deep,
-    fontWeight: "700",
+    flexGrow: 1,
   },
 });

@@ -49,6 +49,9 @@ export default function AdminHomePage() {
           <Link href="/bootstrap" style={{ textDecoration: "none" }}>
             <span className="kk-btn">İlk admin bootstrap</span>
           </Link>
+          <Link href="/giris" style={{ textDecoration: "none" }}>
+            <span className="kk-btn kk-btn-secondary">SMS giriş</span>
+          </Link>
         </div>
 
         <EmptyState title={`${brand.name} yönetim`}>

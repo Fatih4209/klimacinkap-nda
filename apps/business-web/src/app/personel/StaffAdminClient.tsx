@@ -88,7 +88,11 @@ export function StaffAdminClient() {
       setBusy(false);
       return;
     }
-    setInfo(`Personel üyeliği kaydedildi: ${result.data.id}`);
+    setInfo(
+      result.data.isActive
+        ? `Personel zaten aktif: ${result.data.id}`
+        : `Davet oluşturuldu (pending). Token: ${result.data.inviteToken ?? "—"} — personel uygulamadan kabul etmeli; açık kayıt yok.`,
+    );
     setBusy(false);
   }
 
