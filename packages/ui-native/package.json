@@ -20,7 +20,8 @@
     "react-native": "*"
   },
   "dependencies": {
-    "@klimacin/config": "workspace:*"
+    "@klimacin/config": "workspace:*",
+    "expo-linear-gradient": "^58.0.3"
   },
   "devDependencies": {
     "@types/react": "~19.3.0",

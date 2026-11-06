@@ -54,7 +54,6 @@ export default function App() {
       } else if (deepLink.category === "su") {
         setFlow("su");
       } else {
-        // Category unknown — open orders list (honest; no invent su)
         setFlow("tabs");
         setTab("orders");
       }
@@ -68,18 +67,25 @@ export default function App() {
   if (!fontsLoaded) {
     return (
       <View style={styles.boot}>
-        <ActivityIndicator color={color.brand.deep} />
+        <ActivityIndicator color={color.brand.glow} />
       </View>
     );
   }
 
   const showTabs = flow === "tabs";
+  const isHome = showTabs && tab === "home";
 
   return (
-    <Screen>
-      <StatusBar style="dark" />
+    <Screen bleed={isHome} tone="night">
+      <StatusBar style="light" />
       <View style={styles.shell}>
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView
+          contentContainerStyle={[
+            styles.content,
+            isHome ? null : styles.contentPad,
+          ]}
+          showsVerticalScrollIndicator={false}
+        >
           {showTabs && tab === "home" ? (
             <HomeScreen
               onSelectCategory={onSelectCategory}
@@ -118,12 +124,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: color.surface.base,
+    backgroundColor: color.brand.night,
   },
   shell: { flex: 1 },
   content: {
-    gap: space[6],
-    paddingBottom: space[10],
     flexGrow: 1,
+  },
+  contentPad: {
+    paddingBottom: space[10],
   },
 });

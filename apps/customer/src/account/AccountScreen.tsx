@@ -124,13 +124,13 @@ const styles = StyleSheet.create({
   },
   linkBtn: {
     borderWidth: 1,
-    borderColor: color.brand.mid,
+    borderColor: color.border.strong,
     borderRadius: 999,
     paddingVertical: space[3],
     alignItems: "center",
   },
   linkBtnText: {
-    color: color.brand.deep,
+    color: color.brand.soft,
     fontWeight: "700",
   },
 });

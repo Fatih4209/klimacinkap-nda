@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import {
   brand,
   color,
+  motion,
   space,
   typography,
   type ServiceCategoryId,
@@ -18,6 +25,7 @@ import {
 import {
   BrandMark,
   EmptyState,
+  FadeRise,
   ServiceCategoryGrid,
 } from "@klimacin/ui-native";
 
@@ -27,6 +35,12 @@ type Props = {
   onOpenAccount: () => void;
 };
 
+const MIN_HERO = Math.max(Dimensions.get("window").height * 0.72, 520);
+
+/**
+ * First viewport = one composition: brand hero + equal Klima/Su/Tüp.
+ * Address / aktif işler live below the fold — not hero clutter.
+ */
 export function HomeScreen({
   onSelectCategory,
   onOpenOrders,
@@ -70,88 +84,132 @@ export function HomeScreen({
 
   return (
     <View style={styles.wrap}>
-      <View style={styles.hero}>
-        <BrandMark size="hero" />
-        <Text style={styles.slogan}>{brand.slogan}</Text>
+      <View style={[styles.hero, { minHeight: MIN_HERO }]}>
+        <FadeRise delay={0}>
+          <Pressable onPress={onOpenAccount} style={styles.addressRail}>
+            <Text style={styles.addressLabel}>Teslimat</Text>
+            <Text style={styles.addressBody} numberOfLines={1}>
+              {address
+                ? `${address.cityName}/${address.districtName} · ${address.line1}`
+                : "Adres ekle — Hesap"}
+            </Text>
+          </Pressable>
+        </FadeRise>
+
+        <FadeRise delay={motion.fast} style={styles.brandBlock}>
+          <BrandMark size="hero" tone="chalk" style={styles.brand} />
+          <Text style={styles.slogan}>{brand.slogan}</Text>
+        </FadeRise>
+
+        <View style={styles.categories}>
+          <ServiceCategoryGrid onSelect={onSelectCategory} tone="night" />
+        </View>
       </View>
 
-      {address ? (
-        <Pressable onPress={onOpenAccount} style={styles.address}>
-          <Text style={styles.addressLabel}>Teslimat adresi</Text>
-          <Text style={styles.addressBody}>
-            {address.label ? `${address.label} · ` : ""}
-            {address.cityName}/{address.districtName} · {address.line1}
-          </Text>
-        </Pressable>
-      ) : (
-        <Pressable onPress={onOpenAccount}>
+      <View style={styles.below}>
+        <Text style={styles.section}>Aktif işler</Text>
+        {active.length === 0 ? (
           <EmptyState
-            title="Adres seçilmedi"
-            body="Hesaba dokunup adres ekleyin. Harita API olmadan manuel TR il/ilçe girişi yeterli."
+            title="Aktif sipariş yok"
+            body="Tekrar sipariş için Siparişler sekmesini kullanın (stok/fiyat yeniden doğrulanır)."
           />
-        </Pressable>
-      )}
+        ) : (
+          active.map((row) => (
+            <Pressable
+              key={`${row.kind}-${row.id}`}
+              onPress={onOpenOrders}
+              style={styles.activeRow}
+            >
+              <Text style={styles.activeTitle}>{row.label}</Text>
+              <Text style={styles.activeMeta}>{row.status}</Text>
+            </Pressable>
+          ))
+        )}
 
-      <ServiceCategoryGrid onSelect={onSelectCategory} />
-
-      <Text style={styles.section}>Aktif işler</Text>
-      {active.length === 0 ? (
-        <EmptyState
-          title="Aktif sipariş yok"
-          body="Tekrar sipariş için Siparişler sekmesini kullanın (stok/fiyat yeniden doğrulanır)."
-        />
-      ) : (
-        active.map((row) => (
-          <Pressable
-            key={`${row.kind}-${row.id}`}
-            onPress={onOpenOrders}
-            style={styles.activeRow}
-          >
-            <Text style={styles.activeTitle}>{row.label}</Text>
-            <Text style={styles.activeMeta}>{row.status}</Text>
-          </Pressable>
-        ))
-      )}
-
-      {note ? <EmptyState title="Bağımlılık" body={note} /> : null}
+        {note ? <EmptyState title="Bağımlılık" body={note} /> : null}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { gap: space[5], paddingBottom: space[6] },
-  hero: { gap: space[3] },
+  wrap: { flexGrow: 1 },
+  hero: {
+    justifyContent: "space-between",
+    paddingHorizontal: space[5],
+    paddingTop: space[4],
+    paddingBottom: space[7],
+    gap: space[6],
+  },
+  addressRail: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: space[3],
+    paddingVertical: space[2],
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: color.border.subtle,
+  },
+  addressLabel: {
+    fontFamily: typography.fontFamily.sans,
+    fontSize: typography.size.xs,
+    fontWeight: "700",
+    letterSpacing: 1.4,
+    textTransform: "uppercase",
+    color: color.brand.glow,
+  },
+  addressBody: {
+    flex: 1,
+    fontFamily: typography.fontFamily.sans,
+    fontSize: typography.size.sm,
+    color: color.text.secondary,
+  },
+  brandBlock: {
+    gap: space[4],
+    paddingTop: space[6],
+  },
+  brand: {
+    maxWidth: 340,
+  },
   slogan: {
     fontFamily: typography.fontFamily.sans,
     fontSize: typography.size.lg,
     lineHeight: typography.size.lg * typography.lineHeight.snug,
     color: color.text.secondary,
+    maxWidth: 320,
   },
-  address: {
-    gap: space[1],
-    padding: space[3],
-    borderRadius: 12,
-    backgroundColor: color.brand.mist,
+  categories: {
+    marginHorizontal: -space[5],
+    paddingHorizontal: space[5],
   },
-  addressLabel: {
-    fontSize: typography.size.xs,
-    color: color.brand.mid,
-    fontWeight: "700",
-    textTransform: "uppercase",
+  below: {
+    gap: space[3],
+    paddingHorizontal: space[5],
+    paddingTop: space[6],
+    paddingBottom: space[10],
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: color.border.subtle,
   },
-  addressBody: { color: color.text.primary },
   section: {
+    fontFamily: typography.fontFamily.sans,
     fontWeight: "700",
     color: color.text.primary,
-    fontSize: typography.size.md,
+    fontSize: typography.size.sm,
+    letterSpacing: 1.2,
+    textTransform: "uppercase",
   },
   activeRow: {
-    padding: space[3],
-    borderWidth: 1,
-    borderColor: color.border.subtle,
-    borderRadius: 12,
+    paddingVertical: space[3],
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: color.border.subtle,
     gap: 4,
   },
-  activeTitle: { fontWeight: "600", color: color.text.primary },
-  activeMeta: { color: color.text.secondary, fontSize: typography.size.sm },
+  activeTitle: {
+    fontFamily: typography.fontFamily.sans,
+    fontWeight: "600",
+    color: color.text.primary,
+  },
+  activeMeta: {
+    color: color.text.secondary,
+    fontSize: typography.size.sm,
+  },
 });

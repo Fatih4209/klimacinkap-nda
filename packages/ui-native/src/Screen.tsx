@@ -1,26 +1,48 @@
 import { SafeAreaView, StyleSheet, View, type ViewProps } from "react-native";
 import { color, space } from "@klimacin/config";
+import { Atmosphere } from "./Atmosphere";
 
-export function Screen({ style, children, ...rest }: ViewProps) {
+type Props = ViewProps & {
+  /** night = premium dark atmosphere (default); chalk = light sheet */
+  tone?: "night" | "chalk";
+  /** Edge-to-edge content (home hero). Default pads for forms. */
+  bleed?: boolean;
+};
+
+export function Screen({
+  tone = "night",
+  bleed = false,
+  style,
+  children,
+  ...rest
+}: Props) {
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={[styles.inner, style]} {...rest}>
-        {children}
-      </View>
-    </SafeAreaView>
+    <Atmosphere tone={tone} style={styles.flex}>
+      <SafeAreaView style={styles.flex}>
+        <View
+          style={[bleed ? styles.bleed : styles.padded, style]}
+          {...rest}
+        >
+          {children}
+        </View>
+      </SafeAreaView>
+    </Atmosphere>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: color.surface.base,
-  },
-  inner: {
+  flex: { flex: 1 },
+  padded: {
     flex: 1,
     paddingHorizontal: space[5],
-    paddingTop: space[6],
-    paddingBottom: space[7],
+    paddingTop: space[5],
+    paddingBottom: space[6],
     gap: space[5],
+  },
+  bleed: {
+    flex: 1,
+    paddingHorizontal: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
   },
 });

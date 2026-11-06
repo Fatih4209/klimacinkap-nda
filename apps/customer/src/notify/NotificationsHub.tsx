@@ -491,10 +491,10 @@ const styles = StyleSheet.create({
   },
   chipActive: {
     backgroundColor: color.brand.soft,
-    borderColor: color.brand.mid,
+    borderColor: color.border.strong,
   },
   chipText: { color: color.text.secondary },
-  chipTextActive: { color: color.brand.deep, fontWeight: "700" },
+  chipTextActive: { color: color.brand.soft, fontWeight: "700" },
   primaryBtn: {
     backgroundColor: color.brand.deep,
     borderRadius: 999,
@@ -504,13 +504,13 @@ const styles = StyleSheet.create({
   primaryBtnText: { color: color.text.inverse, fontWeight: "700" },
   secondaryBtn: {
     borderWidth: 1,
-    borderColor: color.brand.mid,
+    borderColor: color.border.strong,
     borderRadius: 999,
     paddingVertical: space[2],
     paddingHorizontal: space[4],
     alignItems: "center",
   },
-  secondaryBtnText: { color: color.brand.deep, fontWeight: "600" },
+  secondaryBtnText: { color: color.brand.soft, fontWeight: "600" },
   input: {
     borderWidth: 1,
     borderColor: color.border.subtle,

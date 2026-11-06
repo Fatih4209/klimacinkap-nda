@@ -1,47 +1,55 @@
 /**
  * Design tokens — platform-agnostic. Web and native map these to CSS / StyleSheet.
- * Direction: cool service trust (deep teal + chalk air), not purple/cream defaults.
+ * Direction: deep service night (ink teal + chalk air + graphite), diamond clarity.
+ * Avoid purple gradients, cream+terracotta brochure, and flat white dashboards.
  */
 export const color = {
   brand: {
-    ink: "#0B2C34",
-    deep: "#0E4A56",
-    mid: "#1A6B78",
-    soft: "#D7ECF0",
-    mist: "#EEF6F8",
+    ink: "#04161C",
+    deep: "#0A3A44",
+    mid: "#1B7A88",
+    soft: "#9FD0D8",
+    mist: "#E8F4F6",
+    night: "#021015",
+    glow: "#2EC4CE",
   },
   klima: {
-    solid: "#1F7AAD",
-    soft: "#D6EAF6",
+    solid: "#3D9FD4",
+    soft: "#12384A",
   },
   su: {
-    solid: "#1A9A8C",
-    soft: "#D4F0EC",
+    solid: "#2BB5A4",
+    soft: "#0F3A36",
   },
   tup: {
-    solid: "#C46A2D",
-    soft: "#F6E4D6",
+    solid: "#D4A15C",
+    soft: "#3A2E1A",
   },
   surface: {
-    base: "#F3F7F8",
-    raised: "#FFFFFF",
-    sunken: "#E6EEF0",
+    base: "#071820",
+    raised: "#0D2430",
+    sunken: "#041018",
+    chalk: "#F4FAFB",
+    panel: "rgba(244,250,251,0.06)",
   },
   text: {
-    primary: "#0F1C24",
-    secondary: "#4A5C66",
-    muted: "#6E818A",
-    inverse: "#F7FBFC",
+    primary: "#F4FAFB",
+    secondary: "#A8C0C8",
+    muted: "#6F8A94",
+    /** On solid brand / accent fills */
+    inverse: "#F4FAFB",
+    onChalk: "#0F1C24",
+    onChalkSecondary: "#4A5C66",
   },
   border: {
-    subtle: "#D2DEE2",
-    strong: "#A8BCC3",
+    subtle: "rgba(244,250,251,0.12)",
+    strong: "rgba(244,250,251,0.28)",
   },
   state: {
-    success: "#1F7A4D",
-    warning: "#B7791F",
-    danger: "#B42318",
-    info: "#1F6FEB",
+    success: "#3DB87A",
+    warning: "#D4A017",
+    danger: "#E05244",
+    info: "#4B9EFF",
   },
 } as const;
 
@@ -61,9 +69,9 @@ export const space = {
 
 export const radius = {
   sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
+  md: 14,
+  lg: 20,
+  xl: 28,
 } as const;
 
 export const typography = {
@@ -78,13 +86,13 @@ export const typography = {
     md: 16,
     lg: 18,
     xl: 22,
-    "2xl": 28,
-    "3xl": 36,
-    hero: 44,
+    "2xl": 30,
+    "3xl": 40,
+    hero: 52,
   },
   lineHeight: {
-    tight: 1.15,
-    snug: 1.3,
+    tight: 1.08,
+    snug: 1.25,
     normal: 1.5,
   },
   weight: {
@@ -96,9 +104,10 @@ export const typography = {
 } as const;
 
 export const motion = {
-  fast: 160,
-  base: 280,
-  slow: 420,
+  fast: 180,
+  base: 320,
+  slow: 520,
+  stagger: 90,
 } as const;
 
 export const categoryAccent = {

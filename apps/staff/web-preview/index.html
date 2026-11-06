@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=390, initial-scale=1" />
+    <title>Klimacın Kapıda Personel — önizleme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Manrope:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --night: #021015; --ink: #04161c; --deep: #0a3a44;
+        --glow: #2ec4ce; --soft: #9fd0d8; --chalk: #f4fafb;
+        --sec: #a8c0c8; --muted: #6f8a94; --border: rgba(244,250,251,.12);
+        --panel: rgba(244,250,251,.06);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Manrope, sans-serif;
+        color: var(--chalk);
+        background:
+          radial-gradient(900px 520px at 12% -8%, rgba(46,196,206,.22), transparent 55%),
+          linear-gradient(165deg, var(--night), var(--ink) 48%, var(--deep));
+        min-height: 100vh;
+      }
+      .phone { max-width: 390px; margin: 0 auto; min-height: 100vh; }
+      .hero {
+        padding: 2.5rem 1.25rem 2rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .kicker {
+        color: var(--glow);
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        font-size: .7rem;
+        font-weight: 700;
+        animation: rise .5s ease both;
+      }
+      .brand {
+        font-family: Fraunces, serif;
+        font-size: 2.8rem;
+        line-height: 1.05;
+        letter-spacing: -.04em;
+        margin: .75rem 0;
+        max-width: 11ch;
+        animation: rise .5s .1s ease both;
+      }
+      .slogan {
+        color: var(--sec);
+        font-size: 1.05rem;
+        line-height: 1.35;
+        max-width: 30ch;
+        animation: rise .5s .2s ease both;
+      }
+      .link {
+        display: inline-block;
+        margin-top: 1rem;
+        border-bottom: 1px solid var(--glow);
+        padding-bottom: 2px;
+        font-weight: 700;
+        font-size: .85rem;
+        animation: rise .5s .28s ease both;
+      }
+      .pad { padding: 1.5rem 1.25rem 3rem; }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.1rem;
+        margin-top: 1rem;
+      }
+      .card h2 { margin: 0 0 .35rem; font-size: 1.1rem; }
+      .meta { color: var(--sec); font-size: .85rem; }
+      .btn {
+        margin-top: .9rem;
+        display: inline-flex;
+        background: var(--deep);
+        color: var(--chalk);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: .65rem 1.1rem;
+        font-weight: 700;
+      }
+      .live { color: var(--glow); font-weight: 600; font-size: .85rem; margin-top: .5rem; }
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone">
+      <header class="hero">
+        <div class="kicker">Saha personeli</div>
+        <h1 class="brand">Klimacın Kapıda</h1>
+        <p class="slogan">Atanan işler, durum ve güvenli konum — Klimacın Kapıda</p>
+        <div class="link">Hesap · Gizlilik</div>
+      </header>
+      <section class="pad">
+        <button class="btn" type="button">Atamaları yenile</button>
+        <div class="card">
+          <h2>Atanmış iş yok</h2>
+          <p class="meta">Yalnızca size atanan işler görünür. İşletme panelinden atama gerekir. Konum yalnızca yolda/sahadayken paylaşılır.</p>
+          <p class="live">Takip: canlı ping yok (dürüst boş durum)</p>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

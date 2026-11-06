@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.surface.raised,
   },
   cardFocus: {
-    borderColor: color.brand.mid,
+    borderColor: color.border.strong,
     borderWidth: 2,
   },
   cardTitle: {
@@ -196,9 +196,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: color.brand.mid,
+    borderColor: color.border.strong,
   },
-  repeatText: { color: color.brand.deep, fontWeight: "600", fontSize: 13 },
+  repeatText: { color: color.brand.soft, fontWeight: "600", fontSize: 13 },
   rateRow: {
     flexDirection: "row",
     flexWrap: "wrap",

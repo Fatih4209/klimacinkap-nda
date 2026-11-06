@@ -14,9 +14,14 @@ import {
   Manrope_600SemiBold,
   Manrope_700Bold,
 } from "@expo-google-fonts/manrope";
-import { brand, color, space, typography } from "@klimacin/config";
+import { brand, color, motion, space, typography } from "@klimacin/config";
 import { roleLabelsTr } from "@klimacin/shared";
-import { BrandMark, EmptyState, Screen } from "@klimacin/ui-native";
+import {
+  BrandMark,
+  EmptyState,
+  FadeRise,
+  Screen,
+} from "@klimacin/ui-native";
 import { StaffJobsScreen } from "./src/StaffJobsScreen";
 import { StaffAccountScreen } from "./src/account/AccountScreen";
 import { useStaffDeepLink } from "./src/linking";
@@ -24,9 +29,8 @@ import { StaffSmsOtpScreen } from "./src/auth/SmsOtpScreen";
 import { AcceptInviteScreen } from "./src/invite/AcceptInviteScreen";
 
 /**
- * Staff app — separate entry from customer.
- * Location is requested only while an assignment is en_route/on_site (phase e).
- * No simulated locations; stale pings are never labeled live by the API.
+ * Staff app — premium field shell, separate from customer.
+ * Location only while assignment is en_route/on_site.
  */
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -56,41 +60,54 @@ export default function App() {
   if (!fontsLoaded) {
     return (
       <View style={styles.boot}>
-        <ActivityIndicator color={color.brand.deep} />
+        <ActivityIndicator color={color.brand.glow} />
       </View>
     );
   }
 
   return (
-    <Screen>
-      <StatusBar style="dark" />
-      <ScrollView contentContainerStyle={styles.content}>
+    <Screen bleed tone="night">
+      <StatusBar style="light" />
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         {showAccount ? (
-          <StaffAccountScreen onBack={() => setShowAccount(false)} />
+          <View style={styles.pad}>
+            <StaffAccountScreen onBack={() => setShowAccount(false)} />
+          </View>
         ) : (
           <>
             <View style={styles.hero}>
-              <BrandMark size="lg" />
-              <Text style={styles.kicker}>{roleLabelsTr.field_staff}</Text>
-              <Text style={styles.slogan}>
-                Atanan işler, durum, canlı konum ve tamamlama kodu — {brand.name}
-              </Text>
+              <FadeRise delay={0}>
+                <Text style={styles.kicker}>{roleLabelsTr.field_staff}</Text>
+              </FadeRise>
+              <FadeRise delay={motion.fast}>
+                <BrandMark size="hero" tone="chalk" style={styles.brand} />
+              </FadeRise>
+              <FadeRise delay={motion.base}>
+                <Text style={styles.slogan}>
+                  Atanan işler, durum ve güvenli konum — {brand.name}
+                </Text>
+              </FadeRise>
+              <FadeRise delay={motion.base + motion.stagger}>
+                <Pressable
+                  onPress={() => setShowAccount(true)}
+                  style={styles.accountBtn}
+                >
+                  <Text style={styles.accountBtnText}>Hesap · Gizlilik</Text>
+                </Pressable>
+              </FadeRise>
             </View>
 
-            <Pressable
-              onPress={() => setShowAccount(true)}
-              style={styles.accountBtn}
-            >
-              <Text style={styles.accountBtnText}>Hesap · Gizlilik</Text>
-            </Pressable>
-
-            <StaffSmsOtpScreen />
-            <AcceptInviteScreen />
-            <StaffJobsScreen />
-
-            {bootNote ? (
-              <EmptyState title="Bağımlılık" body={bootNote} />
-            ) : null}
+            <View style={styles.pad}>
+              <StaffSmsOtpScreen />
+              <AcceptInviteScreen />
+              <StaffJobsScreen />
+              {bootNote ? (
+                <EmptyState title="Bağımlılık" body={bootNote} />
+              ) : null}
+            </View>
           </>
         )}
       </ScrollView>
@@ -103,38 +120,53 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: color.surface.base,
+    backgroundColor: color.brand.night,
   },
   content: {
     gap: space[6],
     paddingBottom: space[10],
+    flexGrow: 1,
   },
   hero: {
-    gap: space[2],
+    paddingHorizontal: space[5],
+    paddingTop: space[8],
+    paddingBottom: space[7],
+    gap: space[4],
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: color.border.subtle,
   },
   kicker: {
     fontFamily: typography.fontFamily.sans,
-    fontWeight: "600",
-    color: color.brand.mid,
-    fontSize: typography.size.sm,
+    fontWeight: "700",
+    color: color.brand.glow,
+    fontSize: typography.size.xs,
     textTransform: "uppercase",
-    letterSpacing: 1,
+    letterSpacing: 1.6,
   },
+  brand: { maxWidth: 320 },
   slogan: {
     fontFamily: typography.fontFamily.sans,
     fontSize: typography.size.lg,
     lineHeight: typography.size.lg * typography.lineHeight.snug,
     color: color.text.secondary,
+    maxWidth: 340,
   },
   accountBtn: {
-    borderWidth: 1,
-    borderColor: color.brand.mid,
-    borderRadius: 999,
-    paddingVertical: space[3],
-    alignItems: "center",
+    alignSelf: "flex-start",
+    marginTop: space[2],
+    borderBottomWidth: 1,
+    borderBottomColor: color.brand.glow,
+    paddingBottom: space[1],
   },
   accountBtnText: {
-    color: color.brand.deep,
+    fontFamily: typography.fontFamily.sans,
+    color: color.text.primary,
     fontWeight: "700",
+    fontSize: typography.size.sm,
+    letterSpacing: 0.4,
+  },
+  pad: {
+    paddingHorizontal: space[5],
+    gap: space[6],
   },
 });

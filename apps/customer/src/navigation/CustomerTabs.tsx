@@ -26,11 +26,12 @@ export function CustomerTabs({ active, onChange }: Props) {
             accessibilityRole="tab"
             accessibilityState={{ selected }}
             onPress={() => onChange(tab.id)}
-            style={[styles.tab, selected ? styles.tabActive : null]}
+            style={styles.tab}
           >
             <Text style={[styles.label, selected ? styles.labelActive : null]}>
               {tab.label}
             </Text>
+            {selected ? <View style={styles.dot} /> : <View style={styles.dotGhost} />}
           </Pressable>
         );
       })}
@@ -41,28 +42,36 @@ export function CustomerTabs({ active, onChange }: Props) {
 const styles = StyleSheet.create({
   bar: {
     flexDirection: "row",
-    borderTopWidth: 1,
+    backgroundColor: color.brand.ink,
+    borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: color.border.subtle,
-    backgroundColor: color.surface.raised,
-    paddingBottom: space[2],
-    paddingTop: space[2],
+    paddingBottom: space[3],
+    paddingTop: space[3],
   },
   tab: {
     flex: 1,
     alignItems: "center",
-    paddingVertical: space[2],
-  },
-  tabActive: {
-    borderTopWidth: 2,
-    borderTopColor: color.brand.deep,
-    marginTop: -1,
+    gap: space[1],
+    paddingVertical: space[1],
   },
   label: {
+    fontFamily: typography.fontFamily.sans,
     fontSize: typography.size.xs,
     color: color.text.muted,
     fontWeight: "600",
+    letterSpacing: 0.3,
   },
   labelActive: {
-    color: color.brand.deep,
+    color: color.text.primary,
+  },
+  dot: {
+    width: 5,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: color.brand.glow,
+  },
+  dotGhost: {
+    width: 5,
+    height: 5,
   },
 });

@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
   primaryBtnText: { color: color.text.inverse, fontWeight: "700" },
   secondaryBtn: {
     borderWidth: 1,
-    borderColor: color.brand.mid,
+    borderColor: color.border.strong,
     borderRadius: 999,
     paddingVertical: space[2],
     paddingHorizontal: space[4],
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     marginTop: space[1],
     alignSelf: "flex-start",
   },
-  secondaryBtnText: { color: color.brand.deep, fontWeight: "600" },
+  secondaryBtnText: { color: color.brand.soft, fontWeight: "600" },
   disabled: { opacity: 0.55 },
   chips: { flexDirection: "row", flexWrap: "wrap", gap: space[2] },
   chip: {
@@ -411,8 +411,8 @@ const styles = StyleSheet.create({
   },
   chipActive: {
     backgroundColor: color.brand.soft,
-    borderColor: color.brand.mid,
+    borderColor: color.border.strong,
   },
   chipText: { color: color.text.secondary },
-  chipTextActive: { color: color.brand.deep, fontWeight: "700" },
+  chipTextActive: { color: color.brand.soft, fontWeight: "700" },
 });

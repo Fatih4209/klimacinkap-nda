@@ -201,5 +201,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: space[3],
     paddingVertical: space[1],
   },
-  chipText: { fontSize: typography.size.xs, color: color.brand.deep },
+  chipText: { fontSize: typography.size.xs, color: color.brand.soft },
 });

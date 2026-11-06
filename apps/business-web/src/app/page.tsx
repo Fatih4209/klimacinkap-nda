@@ -7,40 +7,94 @@ export default function BusinessHomePage() {
   const supabaseReady = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
 
   return (
-    <main className="kk-page" style={{ padding: "2.5rem 1.25rem 4rem" }}>
-      <div style={{ maxWidth: 880, margin: "0 auto", display: "grid", gap: "1.75rem" }}>
-        <header style={{ display: "grid", gap: "0.75rem" }}>
-          <p style={{ margin: 0, color: "var(--kk-text-muted)", letterSpacing: "0.08em", textTransform: "uppercase", fontSize: "0.8rem" }}>
-            {roleLabelsTr.business_owner} paneli
+    <main className="kk-page">
+      <section
+        style={{
+          padding: "clamp(2.5rem, 6vw, 5rem) 1.25rem 3rem",
+          maxWidth: 960,
+          margin: "0 auto",
+          display: "grid",
+          gap: "1.75rem",
+        }}
+      >
+        <header style={{ display: "grid", gap: "1rem", maxWidth: 640 }}>
+          <p
+            style={{
+              margin: 0,
+              color: "var(--kk-brand-glow)",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              fontSize: "0.75rem",
+              fontWeight: 700,
+            }}
+          >
+            {roleLabelsTr.business_owner}
           </p>
           <BrandMark as="h1" size="hero" />
-          <p style={{ margin: 0, maxWidth: "36rem", color: "var(--kk-text-secondary)", fontSize: "1.15rem" }}>
+          <p
+            style={{
+              margin: 0,
+              color: "var(--kk-text-secondary)",
+              fontSize: "1.2rem",
+              lineHeight: 1.35,
+            }}
+          >
             {brand.slogan}
           </p>
         </header>
 
-        <section style={{ display: "grid", gap: "0.85rem" }}>
-          <h2 style={{ margin: 0, fontSize: "1.15rem" }}>Hizmet kategorileri</h2>
-          <p style={{ margin: 0, color: "var(--kk-text-secondary)" }}>
-            Başvuruda seçtiğiniz her kategori ayrı onaylanır. Onay olmadan işletme aktif olmaz.
-          </p>
-          <div className="kk-category-grid">
-            {serviceCategories.map((category) => (
-              <div
-                key={category.id}
-                className="kk-category-tile"
-                data-accent={category.id}
+        <div className="kk-category-grid" role="list">
+          {serviceCategories.map((category) => (
+            <div
+              key={category.id}
+              className="kk-category-tile"
+              data-accent={category.id}
+              role="listitem"
+            >
+              <strong
+                style={{
+                  fontFamily: "var(--kk-font-display)",
+                  fontSize: "1.35rem",
+                  letterSpacing: "-0.02em",
+                }}
               >
-                <strong style={{ fontSize: "1.2rem" }}>{category.label}</strong>
-                <span style={{ color: "var(--kk-text-secondary)" }}>
-                  {category.description}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
+                {category.label}
+              </strong>
+              <span style={{ color: "var(--kk-text-secondary)" }}>
+                {category.description}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
 
-        <section style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+      <section
+        style={{
+          maxWidth: 960,
+          margin: "0 auto",
+          padding: "0 1.25rem 4rem",
+          display: "grid",
+          gap: "1.25rem",
+          borderTop: "1px solid var(--kk-border)",
+          paddingTop: "2rem",
+        }}
+      >
+        <h2
+          style={{
+            margin: 0,
+            fontSize: "0.8rem",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "var(--kk-text-muted)",
+          }}
+        >
+          Panel
+        </h2>
+        <p style={{ margin: 0, color: "var(--kk-text-secondary)" }}>
+          Başvuruda seçtiğiniz her kategori ayrı onaylanır. Onay olmadan işletme
+          aktif olmaz.
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
           <Link href="/basvuru">
             <Button>İşletme başvurusu</Button>
           </Link>
@@ -77,7 +131,7 @@ export default function BusinessHomePage() {
           <Link href="/hesap-silme">
             <Button variant="secondary">Hesap silme</Button>
           </Link>
-        </section>
+        </div>
 
         {!supabaseReady ? (
           <EmptyState title="Supabase bağlantısı yok">
@@ -86,7 +140,7 @@ export default function BusinessHomePage() {
             Durum makinesi hazır: {businessApplicationStatuses.join(", ")}.
           </EmptyState>
         ) : null}
-      </div>
+      </section>
     </main>
   );
 }

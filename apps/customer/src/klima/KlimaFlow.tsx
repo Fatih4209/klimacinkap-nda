@@ -558,14 +558,14 @@ const styles = StyleSheet.create({
   primaryBtnText: { color: color.text.inverse, fontWeight: "700" },
   secondaryBtn: {
     borderWidth: 1,
-    borderColor: color.brand.mid,
+    borderColor: color.border.strong,
     borderRadius: 999,
     paddingVertical: space[2],
     paddingHorizontal: space[4],
     alignItems: "center",
     marginTop: space[2],
   },
-  secondaryBtnText: { color: color.brand.deep, fontWeight: "600" },
+  secondaryBtnText: { color: color.brand.soft, fontWeight: "600" },
   disabled: { opacity: 0.55 },
   offer: {
     gap: space[1],
