@@ -19,8 +19,12 @@
     },
     "preview": {
       "distribution": "internal",
+      "channel": "preview",
       "android": {
         "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false
       },
       "env": {
         "APP_ENV": "preview"
@@ -28,6 +32,13 @@
     },
     "production": {
       "autoIncrement": true,
+      "channel": "production",
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "ios": {
+        "resourceClass": "m-medium"
+      },
       "env": {
         "APP_ENV": "production"
       }
@@ -36,7 +47,8 @@
   "submit": {
     "production": {
       "android": {
-        "track": "internal"
+        "track": "internal",
+        "releaseStatus": "draft"
       },
       "ios": {
         "ascAppId": "REPLACE_AFTER_APP_STORE_CONNECT"

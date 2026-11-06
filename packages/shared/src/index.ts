@@ -32,3 +32,4 @@ export * from "./auth-otp-api";
 export * from "./storage";
 export * from "./business-kpi-api";
 export * from "./customer-orders-api";
+export * from "./ratings-api";

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Klimacın Kapıda",
     "slug": "klimacin-kapida-customer",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,17 +18,22 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.klimacinkapida.customer",
+      "buildNumber": "1",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Adres doğrulama ve haritada konum seçmek için kullanılır. Arka planda konum toplanmaz.",
-        "CFBundleAllowMixedLocalizations": true
+        "CFBundleAllowMixedLocalizations": true,
+        "ITSAppUsesNonExemptEncryption": false
       },
       "associatedDomains": [
         "applinks:klimacinkapida.com",
         "applinks:www.klimacinkapida.com"
-      ]
+      ],
+      "privacyManifests": {
+        "NSPrivacyAccessedAPITypes": []
+      }
     },
     "android": {
       "package": "com.klimacinkapida.customer",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#0E4A56",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -36,7 +41,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
+      "permissions": [],
       "intentFilters": [
         {
           "action": "VIEW",
@@ -76,7 +81,9 @@
         "projectId": "REPLACE_AFTER_EAS_INIT"
       },
       "privacyPolicyPath": "/gizlilik",
-      "accountDeletionPath": "/hesap-silme"
+      "accountDeletionPath": "/hesap-silme",
+      "storePrivacyPolicyUrl": "https://klimacinkapida.com/gizlilik",
+      "storeAccountDeletionUrl": "https://klimacinkapida.com/hesap-silme"
     },
     "owner": "REPLACE_AFTER_EAS_INIT"
   }

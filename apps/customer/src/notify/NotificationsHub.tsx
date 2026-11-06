@@ -397,6 +397,27 @@ export function NotificationsHub({ onBack }: { onBack: () => void }) {
 
       {tab === "issues" ? (
         <View style={styles.card}>
+          <Text style={styles.meta}>Konu türü</Text>
+          <View style={styles.chips}>
+            <Pressable
+              onPress={() => setSubjectKind("product_order")}
+              style={[
+                styles.chip,
+                subjectKind === "product_order" ? styles.chipActive : null,
+              ]}
+            >
+              <Text style={styles.chipText}>Sipariş</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => setSubjectKind("klima_appointment")}
+              style={[
+                styles.chip,
+                subjectKind === "klima_appointment" ? styles.chipActive : null,
+              ]}
+            >
+              <Text style={styles.chipText}>Klima</Text>
+            </Pressable>
+          </View>
           <TextInput
             value={subjectId}
             onChangeText={setSubjectId}

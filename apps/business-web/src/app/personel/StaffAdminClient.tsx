@@ -167,7 +167,7 @@ export function StaffAdminClient() {
           style={inputStyle}
         />
         <Button type="submit" disabled={busy}>
-          Üye yap
+          Davet oluştur
         </Button>
       </form>
 

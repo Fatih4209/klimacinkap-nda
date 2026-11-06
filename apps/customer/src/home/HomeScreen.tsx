@@ -24,9 +24,14 @@ import {
 type Props = {
   onSelectCategory: (id: ServiceCategoryId) => void;
   onOpenOrders: () => void;
+  onOpenAccount: () => void;
 };
 
-export function HomeScreen({ onSelectCategory, onOpenOrders }: Props) {
+export function HomeScreen({
+  onSelectCategory,
+  onOpenOrders,
+  onOpenAccount,
+}: Props) {
   const client = getSupabaseBrowserClient(resolvePublicSupabaseEnv());
   const [address, setAddress] = useState<TurkishAddress | null>(null);
   const [active, setActive] = useState<CustomerOrderListItem[]>([]);
@@ -47,11 +52,17 @@ export function HomeScreen({ onSelectCategory, onOpenOrders }: Props) {
       const orders = await listCustomerOrders(client);
       if (orders.ok) {
         setActive(
-          orders.data.filter((o) =>
-            !["delivered", "cancelled", "completed", "rejected"].includes(
-              o.status,
-            ),
-          ).slice(0, 5),
+          orders.data
+            .filter(
+              (o) =>
+                ![
+                  "delivered",
+                  "cancelled",
+                  "completed",
+                  "expired",
+                ].includes(o.status),
+            )
+            .slice(0, 5),
         );
       }
     })();
@@ -65,7 +76,7 @@ export function HomeScreen({ onSelectCategory, onOpenOrders }: Props) {
       </View>
 
       {address ? (
-        <Pressable onPress={onOpenOrders} style={styles.address}>
+        <Pressable onPress={onOpenAccount} style={styles.address}>
           <Text style={styles.addressLabel}>Teslimat adresi</Text>
           <Text style={styles.addressBody}>
             {address.label ? `${address.label} · ` : ""}
@@ -73,10 +84,12 @@ export function HomeScreen({ onSelectCategory, onOpenOrders }: Props) {
           </Text>
         </Pressable>
       ) : (
-        <EmptyState
-          title="Adres seçilmedi"
-          body="Hesap sekmesinden adres ekleyin. Harita API olmadan manuel TR il/ilçe girişi yeterli."
-        />
+        <Pressable onPress={onOpenAccount}>
+          <EmptyState
+            title="Adres seçilmedi"
+            body="Hesaba dokunup adres ekleyin. Harita API olmadan manuel TR il/ilçe girişi yeterli."
+          />
+        </Pressable>
       )}
 
       <ServiceCategoryGrid onSelect={onSelectCategory} />

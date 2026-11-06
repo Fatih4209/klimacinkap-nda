@@ -10,7 +10,7 @@ export const mobileApps = {
     androidPackage: "com.klimacinkapida.customer",
     scheme: "klimacinkapida",
     easProjectSlug: "klimacin-kapida-customer",
-    version: "0.1.0",
+    version: "1.0.0",
   },
   staff: {
     slug: "klimacin-kapida-staff",
@@ -19,7 +19,7 @@ export const mobileApps = {
     androidPackage: "com.klimacinkapida.staff",
     scheme: "klimacinkapida-staff",
     easProjectSlug: "klimacin-kapida-staff",
-    version: "0.1.0",
+    version: "1.0.0",
   },
 } as const;
 
@@ -38,6 +38,8 @@ export const deepLinkPaths = {
   productOrder: "/open/siparis",
   /** Open assignment in staff app */
   staffAssignment: "/open/personel/gorev",
+  /** Accept staff invite */
+  staffInvite: "/open/personel/davet",
   privacy: "/gizlilik",
   accountDeletion: "/hesap-silme",
 } as const;

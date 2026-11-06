@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -44,6 +44,12 @@ export function CatalogOrderFlow({
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    void loadProducts();
+    // Auto-load once on mount; refresh button remains available.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
 
   async function requireSession() {
     if (!client) {
@@ -189,6 +195,7 @@ export function CatalogOrderFlow({
 
   async function cancelOrder() {
     if (!orderId) {
+      setError("İptal edilecek sipariş yok.");
       return;
     }
     setBusy(true);

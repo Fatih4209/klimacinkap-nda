@@ -48,7 +48,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (deepLink?.kind === "assignment") {
+    if (deepLink?.kind === "assignment" || deepLink?.kind === "invite") {
       setShowAccount(false);
     }
   }, [deepLink]);

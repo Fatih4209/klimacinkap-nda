@@ -7,11 +7,16 @@ import {
   placeProductOrder,
   prepareProductOrderRepeat,
   resolvePublicSupabaseEnv,
+  submitJobRating,
   type CustomerOrderListItem,
 } from "@klimacin/shared";
 import { EmptyState } from "@klimacin/ui-native";
 
-export function OrdersScreen() {
+export function OrdersScreen({
+  focusOrderId,
+}: {
+  focusOrderId?: string | null;
+}) {
   const client = getSupabaseBrowserClient(resolvePublicSupabaseEnv());
   const [rows, setRows] = useState<CustomerOrderListItem[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +37,12 @@ export function OrdersScreen() {
   useEffect(() => {
     void reload();
   }, [reload]);
+
+  useEffect(() => {
+    if (focusOrderId) {
+      setInfo(`Derin bağlantı siparişi: ${focusOrderId}`);
+    }
+  }, [focusOrderId]);
 
   async function onRepeat(orderId: string) {
     setBusy(true);
@@ -69,6 +80,24 @@ export function OrdersScreen() {
     await reload();
   }
 
+  async function onRate(row: CustomerOrderListItem, score: number) {
+    setBusy(true);
+    setError(null);
+    setInfo(null);
+    const result = await submitJobRating(client, {
+      score,
+      productOrderId: row.kind === "product" ? row.id : undefined,
+      klimaAppointmentId:
+        row.kind === "klima" ? row.klimaAppointmentId : undefined,
+    });
+    setBusy(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setInfo(`Puan kaydedildi: ${result.data.score}/5`);
+  }
+
   if (!client) {
     return (
       <EmptyState
@@ -85,7 +114,7 @@ export function OrdersScreen() {
         <Text style={styles.link}>Yenile</Text>
       </Pressable>
       {error ? <EmptyState title="Siparişler" body={error} /> : null}
-      {info ? <EmptyState title="Tekrar" body={info} /> : null}
+      {info ? <EmptyState title="Durum" body={info} /> : null}
       {rows.length === 0 && !error ? (
         <EmptyState
           title="Kayıt yok"
@@ -93,7 +122,13 @@ export function OrdersScreen() {
         />
       ) : null}
       {rows.map((row) => (
-        <View key={`${row.kind}-${row.id}`} style={styles.card}>
+        <View
+          key={`${row.kind}-${row.id}`}
+          style={[
+            styles.card,
+            focusOrderId === row.id ? styles.cardFocus : null,
+          ]}
+        >
           <Text style={styles.cardTitle}>{row.label}</Text>
           <Text style={styles.meta}>
             {row.status} · {new Date(row.createdAt).toLocaleString("tr-TR")}
@@ -108,6 +143,21 @@ export function OrdersScreen() {
                 Tekrarla (stok/fiyat yeniden doğrulanır)
               </Text>
             </Pressable>
+          ) : null}
+          {row.canRate ? (
+            <View style={styles.rateRow}>
+              <Text style={styles.meta}>Puan ver:</Text>
+              {[1, 2, 3, 4, 5].map((score) => (
+                <Pressable
+                  key={score}
+                  disabled={busy}
+                  onPress={() => void onRate(row, score)}
+                  style={styles.rateChip}
+                >
+                  <Text style={styles.rateChipText}>{score}</Text>
+                </Pressable>
+              ))}
+            </View>
           ) : null}
         </View>
       ))}
@@ -131,6 +181,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: color.surface.raised,
   },
+  cardFocus: {
+    borderColor: color.brand.mid,
+    borderWidth: 2,
+  },
   cardTitle: {
     fontWeight: "700",
     color: color.text.primary,
@@ -145,4 +199,20 @@ const styles = StyleSheet.create({
     borderColor: color.brand.mid,
   },
   repeatText: { color: color.brand.deep, fontWeight: "600", fontSize: 13 },
+  rateRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: space[1],
+    marginTop: space[2],
+  },
+  rateChip: {
+    minWidth: 32,
+    paddingVertical: space[1],
+    paddingHorizontal: space[2],
+    borderRadius: 8,
+    backgroundColor: color.brand.deep,
+    alignItems: "center",
+  },
+  rateChipText: { color: color.text.inverse, fontWeight: "700" },
 });

@@ -170,6 +170,7 @@ export function KlimaFlow({ onBack }: { onBack: () => void }) {
 
   async function refreshOffers() {
     if (!requestId) {
+      setError("Önce talep oluşturun; teklif listesi uydurulmaz.");
       return;
     }
     setBusy(true);
@@ -226,6 +227,7 @@ export function KlimaFlow({ onBack }: { onBack: () => void }) {
 
   async function confirmHold() {
     if (!hold) {
+      setError("Onaylanacak rezervasyon yok.");
       return;
     }
     setBusy(true);
@@ -408,7 +410,9 @@ export function KlimaFlow({ onBack }: { onBack: () => void }) {
                 </Text>
                 <Text style={styles.offerMeta}>
                   Tamamlanan iş: {offer.completedCount}
-                  {offer.ratingAverage == null ? " · Puan: henüz yok" : ""}
+                  {offer.ratingAverage == null
+                    ? " · Puan: henüz yok"
+                    : ` · Puan: ${offer.ratingAverage.toFixed(1)}`}
                 </Text>
                 <Text style={styles.scope}>{offer.scopeSummary}</Text>
                 <Pressable

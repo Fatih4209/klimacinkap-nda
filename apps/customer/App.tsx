@@ -26,11 +26,7 @@ import {
 import { HomeScreen } from "./src/home/HomeScreen";
 import { OrdersScreen } from "./src/orders/OrdersScreen";
 
-type ActiveFlow =
-  | "tabs"
-  | "klima"
-  | "su"
-  | "tup";
+type ActiveFlow = "tabs" | "klima" | "su" | "tup";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -41,6 +37,7 @@ export default function App() {
   });
   const [tab, setTab] = useState<CustomerTab>("home");
   const [flow, setFlow] = useState<ActiveFlow>("tabs");
+  const [focusOrderId, setFocusOrderId] = useState<string | null>(null);
   const deepLink = useCustomerDeepLink();
 
   useEffect(() => {
@@ -51,7 +48,16 @@ export default function App() {
     } else if (deepLink.kind === "klimaRequest") {
       setFlow("klima");
     } else if (deepLink.kind === "productOrder") {
-      setFlow("su");
+      setFocusOrderId(deepLink.orderId);
+      if (deepLink.category === "tup") {
+        setFlow("tup");
+      } else if (deepLink.category === "su") {
+        setFlow("su");
+      } else {
+        // Category unknown — open orders list (honest; no invent su)
+        setFlow("tabs");
+        setTab("orders");
+      }
     }
   }, [deepLink]);
 
@@ -78,9 +84,12 @@ export default function App() {
             <HomeScreen
               onSelectCategory={onSelectCategory}
               onOpenOrders={() => setTab("orders")}
+              onOpenAccount={() => setTab("account")}
             />
           ) : null}
-          {showTabs && tab === "orders" ? <OrdersScreen /> : null}
+          {showTabs && tab === "orders" ? (
+            <OrdersScreen focusOrderId={focusOrderId} />
+          ) : null}
           {showTabs && tab === "notify" ? (
             <NotificationsHub onBack={() => setTab("home")} />
           ) : null}
@@ -98,9 +107,7 @@ export default function App() {
             <CatalogOrderFlow category="tup" onBack={() => setFlow("tabs")} />
           ) : null}
         </ScrollView>
-        {showTabs ? (
-          <CustomerTabs active={tab} onChange={setTab} />
-        ) : null}
+        {showTabs ? <CustomerTabs active={tab} onChange={setTab} /> : null}
       </View>
     </Screen>
   );

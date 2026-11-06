@@ -118,7 +118,7 @@ export const klimaOfferComparisonSchema = z.object({
   etaMinutes: z.number().int().positive(),
   /** Real completed klima appointments only — never invented. */
   completedCount: z.number().int().nonnegative(),
-  /** Null until a real rating system exists. */
+  /** From business_rating_stats; null until customers submit ratings. */
   ratingAverage: z.number().min(0).max(5).nullable(),
 });
 

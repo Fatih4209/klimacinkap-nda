@@ -1,13 +1,22 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { brand, color, space, typography } from "@klimacin/config";
-import { ACCOUNT_DELETION_STEPS_TR } from "@klimacin/shared";
+import {
+  ACCOUNT_DELETION_STEPS_TR,
+  buildHttpsDeepLinkUrl,
+} from "@klimacin/shared";
 import { EmptyState } from "@klimacin/ui-native";
+import { DeletionRequestForm } from "./DeletionRequestForm";
 
 type Props = {
   onBack: () => void;
 };
 
 export function StaffAccountScreen({ onBack }: Props) {
+  const deletionHttps = buildHttpsDeepLinkUrl({
+    surface: "customer",
+    kind: "accountDeletion",
+  });
+
   return (
     <View style={styles.wrap}>
       <Pressable onPress={onBack} accessibilityRole="button">
@@ -23,9 +32,10 @@ export function StaffAccountScreen({ onBack }: Props) {
           · {s}
         </Text>
       ))}
+      <DeletionRequestForm />
       <EmptyState
         title="Gizlilik / silme URL"
-        body="Web: /gizlilik ve /hesap-silme (işletme paneli). Mağaza incelemesi için aynı metinler shared paketinden gelir."
+        body={`Web: /gizlilik ve /hesap-silme. Mağaza: ${deletionHttps} (DNS sonrası).`}
       />
     </View>
   );

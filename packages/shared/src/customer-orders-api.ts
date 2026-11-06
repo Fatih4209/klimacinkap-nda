@@ -10,6 +10,10 @@ export type CustomerOrderListItem = {
   /** For repeat: product order fields */
   businessId?: string;
   addressId?: string;
+  /** Completed appointment id — for rating (klima only). */
+  klimaAppointmentId?: string;
+  /** True when status allows submit_job_rating. */
+  canRate?: boolean;
 };
 
 export type CustomerOrdersResult =
@@ -39,7 +43,7 @@ export async function listCustomerOrders(
       .limit(40),
     client
       .from("klima_requests")
-      .select("id, status, service_type, address_id, created_at")
+      .select("id, status, job_type, address_id, created_at")
       .eq("customer_id", uid)
       .order("created_at", { ascending: false })
       .limit(40),
@@ -48,25 +52,52 @@ export async function listCustomerOrders(
   if (products.error) return { ok: false, error: products.error.message };
   if (klima.error) return { ok: false, error: klima.error.message };
 
+  const requestIds = (klima.data ?? []).map((r) => r.id as string);
+  const appointmentByRequest = new Map<string, string>();
+  if (requestIds.length > 0) {
+    const { data: appointments, error: apptErr } = await client
+      .from("klima_appointments")
+      .select("id, request_id, status")
+      .in("request_id", requestIds)
+      .eq("status", "completed");
+    if (apptErr) return { ok: false, error: apptErr.message };
+    for (const row of appointments ?? []) {
+      const requestId = row.request_id as string;
+      if (!appointmentByRequest.has(requestId)) {
+        appointmentByRequest.set(requestId, row.id as string);
+      }
+    }
+  }
+
   const items: CustomerOrderListItem[] = [
-    ...(products.data ?? []).map((row) => ({
-      kind: "product" as const,
-      id: row.id as string,
-      status: row.status as string,
-      category: row.category as string,
-      businessId: row.business_id as string,
-      addressId: row.address_id as string,
-      label: `${row.category} · ${row.city_name}/${row.district_name}`,
-      createdAt: row.created_at as string,
-    })),
-    ...(klima.data ?? []).map((row) => ({
-      kind: "klima" as const,
-      id: row.id as string,
-      status: row.status as string,
-      addressId: row.address_id as string,
-      label: `Klima · ${row.service_type}`,
-      createdAt: row.created_at as string,
-    })),
+    ...(products.data ?? []).map((row) => {
+      const status = row.status as string;
+      return {
+        kind: "product" as const,
+        id: row.id as string,
+        status,
+        category: row.category as string,
+        businessId: row.business_id as string,
+        addressId: row.address_id as string,
+        label: `${row.category} · ${row.city_name}/${row.district_name}`,
+        createdAt: row.created_at as string,
+        canRate: status === "delivered",
+      };
+    }),
+    ...(klima.data ?? []).map((row) => {
+      const status = row.status as string;
+      const apptId = appointmentByRequest.get(row.id as string);
+      return {
+        kind: "klima" as const,
+        id: row.id as string,
+        status,
+        addressId: row.address_id as string,
+        label: `Klima · ${row.job_type}`,
+        createdAt: row.created_at as string,
+        klimaAppointmentId: apptId,
+        canRate: Boolean(apptId),
+      };
+    }),
   ].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
   return { ok: true, data: items };

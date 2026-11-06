@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import { brand, color, space, typography } from "@klimacin/config";
 import {
   ACCOUNT_DELETION_STEPS_TR,
@@ -61,9 +61,28 @@ export function AccountScreen({ onBack }: Props) {
       <AddressForm />
       <DeletionRequestForm />
 
+      <Pressable
+        onPress={() => void Linking.openURL(privacyScheme)}
+        style={styles.linkBtn}
+      >
+        <Text style={styles.linkBtnText}>Gizlilik (uygulama içi)</Text>
+      </Pressable>
+      <Pressable
+        onPress={() =>
+          void Linking.openURL(
+            buildCustomSchemeUrl({
+              surface: "customer",
+              kind: "accountDeletion",
+            }),
+          )
+        }
+        style={styles.linkBtn}
+      >
+        <Text style={styles.linkBtnText}>Hesap silme (uygulama içi)</Text>
+      </Pressable>
       <EmptyState
-        title="Derin bağlantılar"
-        body={`DNS sonrası: ${deletionHttps}. Özel şema: ${privacyScheme}`}
+        title="Mağaza URL’leri (DNS sonrası)"
+        body={`Gizlilik: ${buildHttpsDeepLinkUrl({ surface: "customer", kind: "privacy" })} · Silme: ${deletionHttps} — domain bağlanana kadar tarayıcıda açılmaz.`}
       />
     </View>
   );
@@ -102,5 +121,16 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily.sans,
     color: color.text.muted,
     fontSize: typography.size.xs,
+  },
+  linkBtn: {
+    borderWidth: 1,
+    borderColor: color.brand.mid,
+    borderRadius: 999,
+    paddingVertical: space[3],
+    alignItems: "center",
+  },
+  linkBtnText: {
+    color: color.brand.deep,
+    fontWeight: "700",
   },
 });

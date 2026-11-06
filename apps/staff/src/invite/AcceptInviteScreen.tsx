@@ -18,8 +18,10 @@ export function AcceptInviteScreen() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    // Deep link kind assignment uses gorev/; invite uses manual token or future path.
-    // Token can be pasted from owner invite response.
+    if (deepLink?.kind === "invite" && deepLink.inviteToken) {
+      setToken(deepLink.inviteToken);
+      setInfo("Davet bağlantısından token dolduruldu. Kabul et’e basın.");
+    }
   }, [deepLink]);
 
   if (!client) {

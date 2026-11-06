@@ -36,6 +36,9 @@ export function CommsClient() {
     }>
   >([]);
   const [subjectId, setSubjectId] = useState("");
+  const [subjectKind, setSubjectKind] = useState<
+    "product_order" | "klima_appointment"
+  >("product_order");
   const [threadId, setThreadId] = useState<string | null>(null);
   const [messages, setMessages] = useState<
     Array<{ id: string; body: string; createdAt: string }>
@@ -105,7 +108,7 @@ export function CommsClient() {
       setError("Supabase bağlı değil.");
       return;
     }
-    const opened = await openOrGetThread(client, "product_order", subjectId);
+    const opened = await openOrGetThread(client, subjectKind, subjectId);
     if (!opened.ok) {
       setError(opened.error);
       return;
@@ -192,11 +195,33 @@ export function CommsClient() {
       </section>
 
       <section style={{ display: "grid", gap: "0.75rem" }}>
-        <h3 style={{ margin: 0 }}>Sipariş mesajı</h3>
+        <h3 style={{ margin: 0 }}>Sipariş / klima mesajı</h3>
         <form onSubmit={openThread} style={{ display: "grid", gap: "0.5rem" }}>
+          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+            <Button
+              type="button"
+              variant={subjectKind === "product_order" ? "primary" : "secondary"}
+              onClick={() => setSubjectKind("product_order")}
+            >
+              Sipariş
+            </Button>
+            <Button
+              type="button"
+              variant={
+                subjectKind === "klima_appointment" ? "primary" : "secondary"
+              }
+              onClick={() => setSubjectKind("klima_appointment")}
+            >
+              Klima randevu
+            </Button>
+          </div>
           <input
             required
-            placeholder="product_order uuid"
+            placeholder={
+              subjectKind === "product_order"
+                ? "product_order uuid"
+                : "klima_appointment uuid"
+            }
             value={subjectId}
             onChange={(e) => setSubjectId(e.target.value)}
             style={inputStyle}

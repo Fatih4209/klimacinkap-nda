@@ -3,11 +3,17 @@ import { brand, deepLinkPaths, mobileApps } from "@klimacin/config";
 export type DeepLinkTarget =
   | { surface: "customer"; kind: "home" }
   | { surface: "customer"; kind: "klimaRequest"; requestId: string }
-  | { surface: "customer"; kind: "productOrder"; orderId: string }
+  | {
+      surface: "customer";
+      kind: "productOrder";
+      orderId: string;
+      category?: "su" | "tup";
+    }
   | { surface: "customer"; kind: "privacy" }
   | { surface: "customer"; kind: "accountDeletion" }
   | { surface: "staff"; kind: "home" }
-  | { surface: "staff"; kind: "assignment"; assignmentId: string };
+  | { surface: "staff"; kind: "assignment"; assignmentId: string }
+  | { surface: "staff"; kind: "invite"; inviteToken: string };
 
 /** Custom-scheme URL for development builds (works without DNS). */
 export function buildCustomSchemeUrl(target: DeepLinkTarget): string {
@@ -17,10 +23,14 @@ export function buildCustomSchemeUrl(target: DeepLinkTarget): string {
       return `${app.scheme}://`;
     case "klimaRequest":
       return `${app.scheme}://klima/talep/${target.requestId}`;
-    case "productOrder":
-      return `${app.scheme}://siparis/${target.orderId}`;
+    case "productOrder": {
+      const cat = target.category ? `/${target.category}` : "";
+      return `${app.scheme}://siparis${cat}/${target.orderId}`;
+    }
     case "assignment":
       return `${app.scheme}://gorev/${target.assignmentId}`;
+    case "invite":
+      return `${app.scheme}://davet/${target.inviteToken}`;
     case "privacy":
       return `${app.scheme}://gizlilik`;
     case "accountDeletion":
@@ -46,6 +56,8 @@ export function buildHttpsDeepLinkPath(target: DeepLinkTarget): string {
       return `${deepLinkPaths.productOrder}/${target.orderId}`;
     case "assignment":
       return `${deepLinkPaths.staffAssignment}/${target.assignmentId}`;
+    case "invite":
+      return `${deepLinkPaths.staffInvite}/${target.inviteToken}`;
     case "privacy":
       return deepLinkPaths.privacy;
     case "accountDeletion":
@@ -83,6 +95,14 @@ export function parseCustomSchemeUrl(
           kind: "klimaRequest",
           requestId: klima[1]!,
         };
+      const orderCat = path.match(/^siparis\/(su|tup)\/([0-9a-f-]{36})$/i);
+      if (orderCat)
+        return {
+          surface: "customer",
+          kind: "productOrder",
+          category: orderCat[1]!.toLowerCase() as "su" | "tup",
+          orderId: orderCat[2]!,
+        };
       const order = path.match(/^siparis\/([0-9a-f-]{36})$/i);
       if (order)
         return {
@@ -102,6 +122,13 @@ export function parseCustomSchemeUrl(
           surface: "staff",
           kind: "assignment",
           assignmentId: asg[1]!,
+        };
+      const invite = path.match(/^davet\/([a-f0-9]{16,})$/i);
+      if (invite)
+        return {
+          surface: "staff",
+          kind: "invite",
+          inviteToken: invite[1]!,
         };
       return null;
     }
